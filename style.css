@@ -39,10 +39,132 @@ body {
     background-color: #abcdef;
 }
 
+header {
+    width: 940px;
+    height: 45px;
+    margin: 0 auto;
+    margin-top: 30px;
+    background-color: rgb(81, 81, 81);
+}
+
+.current-tool {
+    float: left;
+    width: 34px;
+    height: 34px;
+    margin: 5px;
+    border: 1px solid #dddddd;
+}
+
+.current-tool > i {
+    display: block;
+    font-size: 25px;
+    color: rgb(213, 213, 213);
+    line-height: 34px;
+    text-align: center;
+}
+
+.tool-info {
+    float: left;
+    margin-left: 32px;
+    line-height: 45px;
+    color: #e2f0f0;
+}
+
+.tool-info > li {
+    float: left;
+}
+
+.tool-info > li + li {
+    margin-left: 30px;
+}
+
+.tool-info > li p {
+    float: left;
+    font-size: 16px;
+}
+
+.tool-info .lineWidth input {
+    float: left;
+    -webkit-appearance: none;
+    border: 1px solid #666666;
+    outline: none;
+    margin-top: 14px;
+    margin-left: 10px;
+    width: 46px;
+    height: 16px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #454545;
+}
+
+.tool-info > li.color .color-box {
+    float: left;
+    border: 1px solid #fff;
+    width: 20px;
+    height: 20px;
+    margin-top: 12px;
+    margin-left: 10px;
+}
+
+.tool-info > li.color .color-box .color-value {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+}
+
+.tool-info > li.alpha .select-alpha-box {
+    float: left;
+}
+
+.tool-info > li.alpha .select-alpha-box > input {
+    float: left;
+    -webkit-appearance: none;
+    outline: none;
+    margin-top: 14px;
+    margin-left: 10px;
+    width: 46px;
+    height: 16px;
+    border: 1px solid #666666;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    color: #fff;
+    background-color: #454545;
+}
+
+.tool-info > li.alpha .select-alpha-box .select-alpha {
+    position: relative;
+    float: left;
+    width: 12px;
+    height: 16px;
+    margin-top: 14px;
+    border: 1px solid #666666;
+    color: #fff;
+    background-color: #454545;
+}
+
+.tool-info > li.alpha .select-alpha-box .slash{
+    position: absolute;
+    top: 7px;
+    width: 5px;
+    height: 1px;
+    background-color: #d2d2d2;
+}
+.tool-info > li.alpha .select-alpha-box .leftSlash{
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    left: 2px;
+}
+.tool-info > li.alpha .select-alpha-box .rightSlash{
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    left: 5px;
+}
+
+
 main {
     width: 940px;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 #drawing-board {

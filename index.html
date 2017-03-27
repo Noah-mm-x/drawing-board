@@ -7,7 +7,32 @@
 	<script src="lib/jquery-3.1.0.js"></script>
 </head>
 <body>
-<main>
+<header>
+	<div class="current-tool"><i class="iconfont icon-shouhui"></i></div>
+	<ul class="tool-info clearfix">
+		<li class="lineWidth">
+			<p>线条宽度:</p>
+			<input type="number" name="lineWidth">
+		</li>
+		<li class="color">
+			<p>颜色:</p>
+			<div class="color-box">
+				<div class="color-value"></div>
+			</div>
+		</li>
+		<li class="alpha">
+			<p>透明度:</p>
+			<div class="select-alpha-box">
+				<input type="text">
+				<div class="select-alpha">
+					<div class="slash leftSlash"></div>
+					<div class="slash rightSlash"></div>
+				</div>
+			</div>
+		</li>
+	</ul>
+</header>
+<main class="clearfix">
 	<ul class="tools clearfix">
 		<li data-tool="1" class="active"><i class="iconfont icon-shouhui"></i></li>
 		<li data-tool="2" ><i class="iconfont icon-maobi"></i></li>
@@ -15,7 +40,7 @@
 		<li data-tool="4" ><i class="iconfont icon-fangkuai"></i></li>
 	</ul>
 	<input id="select-tool" type="hidden" value="1">
-	<canvas id="drawing-board" width="750" height="400"></canvas>
+	<canvas id="drawing-board" width="862" height="400"></canvas>
 </main>
 
 <script src="main.js"></script>
