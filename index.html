@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>画板</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="lib/jquery-3.1.0.js"></script>
+</head>
+<body>
+<main>
+	<ul class="tools clearfix">
+		<li data-tool="1" class="active"><i class="iconfont icon-shouhui"></i></li>
+		<li data-tool="2" ><i class="iconfont icon-maobi"></i></li>
+		<li data-tool="3" ><i class="iconfont icon-yuanxing"></i></li>
+		<li data-tool="4" ><i class="iconfont icon-fangkuai"></i></li>
+	</ul>
+	<input id="select-tool" type="hidden" value="1">
+	<canvas id="drawing-board" width="750" height="400"></canvas>
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>
