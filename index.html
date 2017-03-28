@@ -42,7 +42,75 @@
 	<input id="select-tool" type="hidden" value="1">
 	<canvas id="drawing-board" width="862" height="400"></canvas>
 </main>
-
+<div class="popup-color">
+	<div class="title">颜色选择器</div>
+	<div class="content">
+		<div class="left">
+			<ul class="alternative-color">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+		<div class="divider"></div>
+		<div class="right">
+			<div class="color-show-box clearfix">
+				<div class="color-show">
+					新的
+					<div class="color-contrast">
+						<div class="new-color"></div>
+						<div class="current-color"></div>
+					</div>
+					当前
+				</div>
+				<div class="color-show-btns">
+					<a href="javascript:;" class="confirm">确定</a>
+					<a href="javascript:;" class="cancel">取消</a>
+				</div>
+			</div>
+			<div class="color-setting clearfix">
+				<div class="rgb-color clearfix">
+					<ul>
+						<li class="clearfix">
+							<p>R:</p>
+							<input type="number" name="R-color">
+						</li>
+						<li class="clearfix">
+							<p>G:</p>
+							<input type="number" name="G-color">
+						</li>
+						<li class="clearfix">
+							<p>B:</p>
+							<input type="number" name="B-color">
+						</li>
+					</ul>
+				</div>
+				<div class="hex-color clearfix">
+					<p>16进制值：</p>
+					<div class="hex-color-setting"><p>#</p><input type="number" name="hex-color"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 <script src="main.js"></script>
 </body>
 </html>
