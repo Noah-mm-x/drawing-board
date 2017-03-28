@@ -121,6 +121,10 @@ header {
     background-color: #000;
 }
 
+.tool-info > li.alpha{
+    position: relative;
+}
+
 .tool-info > li.alpha .select-alpha-box {
     float: left;
 }
@@ -171,6 +175,33 @@ header {
     left: 5px;
 }
 
+.tool-info > li.alpha .select-alpha-slider{
+    display: none;
+    position: absolute;
+    top: 46px;
+    left: 8px;
+    width: 118px;
+    height: 26px;
+    background-color: #535353;
+}
+.tool-info > li.alpha .select-alpha-slider .slider-axis{
+    position: absolute;
+    top: 11px;
+    left: 9px;
+    width: 100px;
+    height: 3px;
+    background-color: #757575;
+}
+.tool-info > li.alpha .select-alpha-slider .slider-axis-triangle{
+    position: absolute;
+    top: 0;
+    left: 94px;
+    width: 0;
+    height: 0;
+    border-bottom: 12px solid #f0f0f0;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+}
 main {
     width: 940px;
     margin: 0 auto;
