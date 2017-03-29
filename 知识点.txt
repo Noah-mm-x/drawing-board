@@ -1,0 +1,4 @@
+网址：https://cn.vuejs.org
+1、可以在body下给个div，在给其绑定个id，借此当做vue的总入口
+2、用v-if实现弹窗的消失出现，CSS不能设置display:none，设置后v-if失效。
+    解决办法：为元素设置v-cloak 意思是设置元素未编译时候的状态，防止js未加载时候，元素闪动一下

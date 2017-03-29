@@ -48,7 +48,20 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
+[v-cloak] {
+    display: none;
+}
+
+.show{
+    display: block !important;
+}
+
+.hidden{
+    display: none !important;
+}
+
 .tr-bk{
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -269,7 +282,7 @@ main {
 
 /*弹窗*/
 .popup-color {
-    display: none;
+    /*display: none;*/
     position: fixed;
     top: 100px;
     left: 100px;
@@ -301,7 +314,7 @@ main {
 
 .popup-color .left {
     float: left;
-    width: 252px;
+    width: 241px;
     height: 252px;
     margin-top: 30px;
     margin-left: 11px;
@@ -318,9 +331,8 @@ main {
 .popup-color .alternative-color > li {
     float: left;
     margin: 5px;
-    width: 15px;
-    height: 15px;
-    background-color: #2b292b;
+    width: 20px;
+    height: 20px;
 }
 
 .popup-color .divider {

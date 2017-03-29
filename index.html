@@ -5,119 +5,104 @@
 	<title>画板</title>
 	<link rel="stylesheet" href="style.css">
 	<script src="lib/jquery-3.1.0.js"></script>
+	<script src="lib/vue.min.js"></script>
 </head>
 <body>
-<header>
-	<div class="current-tool"><i class="iconfont icon-shouhui"></i></div>
-	<ul class="tool-info clearfix">
-		<li class="lineWidth">
-			<p>线条宽度:</p>
-			<input type="number" name="lineWidth">
-		</li>
-		<li class="color">
-			<p>颜色:</p>
-			<div class="color-box">
-				<div class="color-value"></div>
-			</div>
-		</li>
-		<li class="alpha">
-			<p>透明度:</p>
-			<div class="select-alpha-box">
-				<input type="text" name="alpha">
-				<div class="select-alpha">
-					<div class="slash leftSlash"></div>
-					<div class="slash rightSlash"></div>
+<div id="drawing-board-page">
+	<header>
+		<div class="current-tool"><i class="iconfont icon-shouhui"></i></div>
+		<ul class="tool-info clearfix">
+			<li class="lineWidth">
+				<p>线条宽度:</p>
+				<input type="number" name="lineWidth">
+			</li>
+			<li class="color">
+				<p>颜色:</p>
+				<div class="color-box" @click="clickPopupColorShow($event)">
+					<div class="color-value"></div>
 				</div>
-			</div>
-			<div class="select-alpha-slider">
-				<div class="slider-axis">
-					<div class="slider-axis-trangle"></div>
-				</div>
-			</div>
-		</li>
-	</ul>
-</header>
-<main class="clearfix">
-	<ul class="tools clearfix">
-		<li data-tool="1" class="active"><i class="iconfont icon-shouhui"></i></li>
-		<li data-tool="2" ><i class="iconfont icon-maobi"></i></li>
-		<li data-tool="3" ><i class="iconfont icon-yuanxing"></i></li>
-		<li data-tool="4" ><i class="iconfont icon-fangkuai"></i></li>
-	</ul>
-	<input id="select-tool" type="hidden" value="1">
-	<canvas id="drawing-board" width="862" height="400"></canvas>
-</main>
-<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
-<div class="tr-bk"></div>
-<div class="popup-color">
-	<div class="title">颜色选择器</div>
-	<div class="content">
-		<div class="left">
-			<ul class="alternative-color">
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-				<li></li>
-			</ul>
-		</div>
-		<div class="divider"></div>
-		<div class="right">
-			<div class="color-show-box clearfix">
-				<div class="color-show">
-					新的
-					<div class="color-contrast">
-						<div class="new-color"></div>
-						<div class="current-color"></div>
+			</li>
+			<li class="alpha">
+				<p>透明度:</p>
+				<div class="select-alpha-box">
+					<input type="text" name="alpha">
+					<div class="select-alpha">
+						<div class="slash leftSlash"></div>
+						<div class="slash rightSlash"></div>
 					</div>
-					当前
 				</div>
-				<div class="color-show-btns">
-					<a href="javascript:;" class="confirm">确定</a>
-					<a href="javascript:;" class="cancel">取消</a>
+				<div class="select-alpha-slider">
+					<div class="slider-axis">
+						<div class="slider-axis-trangle"></div>
+					</div>
 				</div>
+			</li>
+		</ul>
+	</header>
+	<main class="clearfix">
+		<ul class="tools clearfix">
+			<li data-tool="1" class="active"><i class="iconfont icon-shouhui"></i></li>
+			<li data-tool="2"><i class="iconfont icon-maobi"></i></li>
+			<li data-tool="3"><i class="iconfont icon-yuanxing"></i></li>
+			<li data-tool="4"><i class="iconfont icon-fangkuai"></i></li>
+		</ul>
+		<input id="select-tool" type="hidden" value="1">
+		<canvas id="drawing-board" width="862" height="400"></canvas>
+	</main>
+	<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
+	<div class="tr-bk"></div>
+
+	<div class="popup-color" v-if="popupColorShow" v-cloak>
+		<div class="title">颜色选择器</div>
+		<div class="content">
+			<div class="left">
+				<ul class="alternative-color">
+					<li v-for="color in colors" :style="{backgroundColor: color}"></li>
+				</ul>
 			</div>
-			<div class="color-setting clearfix">
-				<div class="rgb-color clearfix">
-					<ul>
-						<li class="clearfix">
-							<p>R:</p>
-							<input type="number" name="R-color">
-						</li>
-						<li class="clearfix">
-							<p>G:</p>
-							<input type="number" name="G-color">
-						</li>
-						<li class="clearfix">
-							<p>B:</p>
-							<input type="number" name="B-color">
-						</li>
-					</ul>
+			<div class="divider"></div>
+			<div class="right">
+				<div class="color-show-box clearfix">
+					<div class="color-show">
+						新的
+						<div class="color-contrast">
+							<div class="new-color"></div>
+							<div class="current-color"></div>
+						</div>
+						当前
+					</div>
+					<div class="color-show-btns">
+						<a href="javascript:;" class="confirm" @click="colorConfirm()">确定</a>
+						<a href="javascript:;" class="cancel" @click="colorCancel()">取消</a>
+					</div>
 				</div>
-				<div class="hex-color clearfix">
-					<p>16进制值：</p>
-					<div class="hex-color-setting"><p>#</p><input type="number" name="hex-color"></div>
+				<div class="color-setting clearfix">
+					<div class="rgb-color clearfix">
+						<ul>
+							<li class="clearfix">
+								<p>R:</p>
+								<input type="number" name="R-color" v-model="rgbColor[0]">
+							</li>
+							<li class="clearfix">
+								<p>G:</p>
+								<input type="number" name="G-color" v-model="rgbColor[1]">
+							</li>
+							<li class="clearfix">
+								<p>B:</p>
+								<input type="number" name="B-color" v-model="rgbColor[2]">
+							</li>
+						</ul>
+					</div>
+					<div class="hex-color clearfix">
+						<p>16进制值：</p>
+						<div class="hex-color-setting"><p>#</p><input type="number" name="hex-color" v-model="hexColor"></div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <script src="main.js"></script>
 </body>
 </html>
