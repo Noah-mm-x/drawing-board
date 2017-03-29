@@ -61,7 +61,6 @@ input[type="number"] {
 }
 
 .tr-bk{
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -141,7 +140,6 @@ header {
 .tool-info > li.color .color-box .color-value {
     width: 100%;
     height: 100%;
-    background-color: #000;
 }
 
 .tool-info > li.alpha{
@@ -370,13 +368,11 @@ main {
 .popup-color .color-show .color-contrast .new-color {
     width: 100%;
     height: 50%;
-    background-color: #000;
 }
 
 .popup-color .color-show .color-contrast .current-color {
     width: 100%;
     height: 50%;
-    background-color: #fff;
 }
 
 .popup-color .color-show-btns {

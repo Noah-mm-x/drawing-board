@@ -18,8 +18,8 @@
 			</li>
 			<li class="color">
 				<p>颜色:</p>
-				<div class="color-box" @click="clickPopupColorShow($event)">
-					<div class="color-value"></div>
+				<div class="color-box" >
+					<div class="color-value" :style="{backgroundColor: '#'+pageColor}" @click="clickPopupColorShow($event)" v-cloak></div>
 				</div>
 			</li>
 			<li class="alpha">
@@ -50,7 +50,7 @@
 		<canvas id="drawing-board" width="862" height="400"></canvas>
 	</main>
 	<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
-	<div class="tr-bk"></div>
+	<div class="tr-bk" v-if="trBk" v-cloak></div>
 
 	<div class="popup-color" v-if="popupColorShow" v-cloak>
 		<div class="title">颜色选择器</div>
@@ -66,8 +66,8 @@
 					<div class="color-show">
 						新的
 						<div class="color-contrast">
-							<div class="new-color"></div>
-							<div class="current-color"></div>
+							<div class="new-color" :style="{backgroundColor:'#'+newColor}"></div>
+							<div class="current-color" :style="{backgroundColor:'#'+currentColor}"></div>
 						</div>
 						当前
 					</div>
@@ -95,12 +95,13 @@
 					</div>
 					<div class="hex-color clearfix">
 						<p>16进制值：</p>
-						<div class="hex-color-setting"><p>#</p><input type="number" name="hex-color" v-model="hexColor"></div>
+						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="hexColor"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div>{{000 | getRColor}}</div>
 </div>
 
 <script src="main.js"></script>
