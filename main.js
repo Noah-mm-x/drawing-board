@@ -100,7 +100,7 @@ $(function () {
             colors: ['#FFDAB9', '#E6E6FA', '#8470FF', '#00CED1', '#7FFFD4', '#00FF7F', '#FFD700', '#CD5C5C', '#BBFFFF',
                 '#FFA500', '#FF0000', '#8A2BE2', '#EED5B7', '#F0FFDF', '#0000FF', '#00BFFF', '#AB82FF', '#E066FF',
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
-            pageColor: 'FF0000',
+            pageColor: '000000',
             newColor: '000000',
             hexColorArr: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'],
             hexColorStr: '0123456789ABCDEF'
@@ -117,6 +117,7 @@ $(function () {
             colorConfirm: function () {
                 this.trBk = false;
                 this.popupColorShow = false;
+                this.pageColor = this.newColor;
             },
             colorCancel: function () {
                 this.trBk = false;
@@ -226,13 +227,13 @@ $(function () {
         },
         computed: {
             getRColor: function () {
-                return this.getRGBColor(this.pageColor)[0];
+                return this.getRGBColor(this.newColor)[0];
             },
             getGColor: function () {
-                return this.getRGBColor(this.pageColor)[1];
+                return this.getRGBColor(this.newColor)[1];
             },
             getBColor: function () {
-                return this.getRGBColor(this.pageColor)[2];
+                return this.getRGBColor(this.newColor)[2];
             }
         }
     });
