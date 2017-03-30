@@ -77,10 +77,8 @@ $(function () {
     // });
     // // 颜色选择器 ~选择
     // popupColorsBox.find('li').on('click', function () {
-    //     console.log(1);
     //     var _self = $(this),
     //         tempColor = getAttrValue(_self, 'backgroundColor');
-    //     console.log(tempColor);
     // });
     // =========== vue ===========
     // ~vue
@@ -102,7 +100,8 @@ $(function () {
             colors: ['#FFDAB9', '#E6E6FA', '#8470FF', '#00CED1', '#7FFFD4', '#00FF7F', '#FFD700', '#CD5C5C', '#BBFFFF',
                 '#FFA500', '#FF0000', '#8A2BE2', '#EED5B7', '#F0FFDF', '#0000FF', '#00BFFF', '#AB82FF', '#E066FF',
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
-            color: '#000000',
+            pageColor: 'FF0000',
+            newColor: '000000',
             hexColorArr: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'],
             hexColorStr: '0123456789ABCDEF'
         },
@@ -112,7 +111,7 @@ $(function () {
                 var currentBkColor = this.getAttrValue($(e.target), 'backgroundColor');
                 this.trBk = true;
                 this.popupColorShow = true;
-                this.color = currentBkColor;
+                this.newColor = this.getHexColor(currentBkColor);
             },
             // 颜色选择器 ~确定
             colorConfirm: function () {
@@ -148,7 +147,7 @@ $(function () {
 
                 // 获取RGB值
                 var tempR, tempG, tempB,
-                    hexColorValueTemp = hexColorValue || '000'; //默认为黑色
+                    hexColorValueTemp = hexColorValue || '000000'; //默认为黑色
                 switch (hexColorValueTemp.length) {
                     case 1:
                         tempR = tempG = tempB = this.calRGBValue(hexColorValueTemp.toUpperCase().repeat(2));
@@ -174,35 +173,34 @@ $(function () {
             },
             // 获取16进制颜色值
             getHexColor: function (RGBColor) {
-                var tempR = RGBColor[0],
-                    tempG = RGBColor[1],
-                    tempB = RGBColor[2];
+                var tempR = this.RGBReg(RGBColor)[0],
+                    tempG = this.RGBReg(RGBColor)[1],
+                    tempB = this.RGBReg(RGBColor)[2];
                 return '' + this.calHexValue(tempR) + this.calHexValue(tempG) + this.calHexValue(tempB);
             },
             // 计算RGB数值 #
             calRGBValue: function (hexVal) {
-                var tenDigit = this.getHexIndex(hexVal.charAt(0)),
-                    singleDigit = this.getHexIndex(hexVal.charAt(1));
-                return tenDigit * 16 + singleDigit;
+                var result = this.getHexIndex(hexVal.charAt(0)) * 16 + this.getHexIndex(hexVal.charAt(1));
+                return result > 10 ? result : '0' + result;
             },
             // 根据位置获得16进制数 #
             getHexValue: function (index) {
                 return this.hexColorStr.charAt(index);
             },
-            // 计算16进制数值 #
-            calHexValue: function (RGBVal) {
-                return this.getHexValue(this.getInt(RGBVal)) + this.getHexValue(this.getRem(RGBVal));
+            // 把RGB其中一项转化成16进制数 #
+            calHexValue: function (val) {
+                return  this.getHexValue(this.getInt16(val))+this.getHexValue(this.getRem16(val));
             },
             //获得数字对应的16进制数列表的位置 #
             getHexIndex: function (value) {
                 return this.hexColorStr.indexOf(value);
             },
             // 取整 #
-            getInt: function (num) {
+            getInt16: function (num) {
                 return Math.floor(num / 16);
             },
             // 取余 #
-            getRem: function (num) {
+            getRem16: function (num) {
                 return num % 16;
             },
             //正则匹配RGB颜色值 #
@@ -227,17 +225,14 @@ $(function () {
             }
         },
         computed: {
-            hexColor: function () {
-                return this.getHexColor(this.color);
-            },
             getRColor: function () {
-                return this.getRGBColor(this.color)[0];
+                return this.getRGBColor(this.pageColor)[0];
             },
             getGColor: function () {
-                return this.getRGBColor(this.color)[1];
+                return this.getRGBColor(this.pageColor)[1];
             },
             getBColor: function () {
-                return this.getRGBColor(this.color)[2];
+                return this.getRGBColor(this.pageColor)[2];
             }
         }
     });

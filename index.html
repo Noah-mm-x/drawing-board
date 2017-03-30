@@ -19,7 +19,7 @@
 			<li class="color">
 				<p>颜色:</p>
 				<div class="color-box">
-					<div class="color-value" :style="{backgroundColor: color}" @click="clickPopupColorShow($event)"
+					<div class="color-value" :style="{backgroundColor: '#'+pageColor}" @click="clickPopupColorShow($event)"
 						 v-cloak></div>
 				</div>
 			</li>
@@ -67,8 +67,8 @@
 					<div class="color-show">
 						新的
 						<div class="color-contrast">
-							<div class="new-color" :style="{backgroundColor:color}"></div>
-							<div class="current-color" :style="{backgroundColor:'#'+hexColor}"></div>
+							<div class="new-color" :style="{backgroundColor:'#'+newColor}"></div>
+							<div class="current-color" :style="{backgroundColor:'#'+pageColor}"></div>
 						</div>
 						当前
 					</div>
@@ -96,13 +96,14 @@
 					</div>
 					<div class="hex-color clearfix">
 						<p>16进制值：</p>
-						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="hexColor"
+						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="newColor"
 																	  maxlength="6"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div v-cloak=""></div>
 </div>
 
 <script src="main.js"></script>
