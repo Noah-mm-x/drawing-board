@@ -18,8 +18,9 @@
 			</li>
 			<li class="color">
 				<p>颜色:</p>
-				<div class="color-box" >
-					<div class="color-value" :style="{backgroundColor: '#'+pageColor}" @click="clickPopupColorShow($event)" v-cloak></div>
+				<div class="color-box">
+					<div class="color-value" :style="{backgroundColor: color}" @click="clickPopupColorShow($event)"
+						 v-cloak></div>
 				</div>
 			</li>
 			<li class="alpha">
@@ -66,8 +67,8 @@
 					<div class="color-show">
 						新的
 						<div class="color-contrast">
-							<div class="new-color" :style="{backgroundColor:'#'+newColor}"></div>
-							<div class="current-color" :style="{backgroundColor:'#'+currentColor}"></div>
+							<div class="new-color" :style="{backgroundColor:color}"></div>
+							<div class="current-color" :style="{backgroundColor:'#'+hexColor}"></div>
 						</div>
 						当前
 					</div>
@@ -81,27 +82,27 @@
 						<ul>
 							<li class="clearfix">
 								<p>R:</p>
-								<input type="number" name="R-color" v-model="rgbColor[0]">
+								<input type="number" name="R-color" v-model="getRColor" readonly>
 							</li>
 							<li class="clearfix">
 								<p>G:</p>
-								<input type="number" name="G-color" v-model="rgbColor[1]">
+								<input type="number" name="G-color" v-model="getGColor" readonly>
 							</li>
 							<li class="clearfix">
 								<p>B:</p>
-								<input type="number" name="B-color" v-model="rgbColor[2]">
+								<input type="number" name="B-color" v-model="getBColor" readonly>
 							</li>
 						</ul>
 					</div>
 					<div class="hex-color clearfix">
 						<p>16进制值：</p>
-						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="hexColor"></div>
+						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="hexColor"
+																	  maxlength="6"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div>{{000 | getRColor}}</div>
 </div>
 
 <script src="main.js"></script>
