@@ -58,7 +58,7 @@
 		<div class="content">
 			<div class="left">
 				<ul class="alternative-color">
-					<li v-for="color in colors" :style="{backgroundColor: color}"></li>
+					<li v-for="color in colors" :style="{backgroundColor: color}" @click="selectColor($event)"></li>
 				</ul>
 			</div>
 			<div class="divider"></div>

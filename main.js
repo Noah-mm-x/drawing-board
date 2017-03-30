@@ -123,6 +123,11 @@ $(function () {
                 this.trBk = false;
                 this.popupColorShow = false;
             },
+            // 颜色选择器 ~选择
+            selectColor:function (e) {
+                var selectedColor = this.getAttrValue($(e.target), 'backgroundColor');
+                this.newColor = this.getHexColor(selectedColor);
+            },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
             getAttrValue: function (target, attr, unit) {
@@ -190,7 +195,7 @@ $(function () {
             },
             // 把RGB其中一项转化成16进制数 #
             calHexValue: function (val) {
-                return  this.getHexValue(this.getInt16(val))+this.getHexValue(this.getRem16(val));
+                return this.getHexValue(this.getInt16(val)) + this.getHexValue(this.getRem16(val));
             },
             //获得数字对应的16进制数列表的位置 #
             getHexIndex: function (value) {
