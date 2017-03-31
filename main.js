@@ -123,6 +123,9 @@ $(function () {
             selectColor: function (e) {
                 var selectedColor = this.getAttrValue($(e.target), 'backgroundColor');
                 this.newColor = this.getHexColorFromRgb(selectedColor);
+                this.RColor = this.getRGBColor(this.getHexColorFromRgb(selectedColor))[0];
+                this.GColor = this.getRGBColor(this.getHexColorFromRgb(selectedColor))[1];
+                this.BColor = this.getRGBColor(this.getHexColorFromRgb(selectedColor))[2];
             },
             // 颜色选择器 ~绑定
             bindHex: function (e) {
@@ -251,18 +254,7 @@ $(function () {
                 }
                 return tempArr;
             }
-        },
-        // computed: {
-        //     getRColor: function () {
-        //         return this.getRGBColor(this.newColor)[0];
-        //     },
-        //     getGColor: function () {
-        //         return this.getRGBColor(this.newColor)[1];
-        //     },
-        //     getBColor: function () {
-        //         return this.getRGBColor(this.newColor)[2];
-        //     }
-        // }
+        }
     });
 
     // 重复字符串 #
