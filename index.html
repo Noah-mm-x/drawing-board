@@ -17,7 +17,7 @@
 		<ul class="tool-info clearfix">
 			<li class="lineWidth">
 				<p>线条宽度:</p>
-				<input type="number" name="lineWidth">
+				<input type="number" name="lineWidth" v-model="lineWidth" v-on:input="bindLineWidth($event)">
 			</li>
 			<li class="color">
 				<p>颜色:</p>
