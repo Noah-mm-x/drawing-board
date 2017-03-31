@@ -80,17 +80,6 @@ $(function () {
     //     var _self = $(this),
     //         tempColor = getAttrValue(_self, 'backgroundColor');
     // });
-    // =========== vue ===========
-    // ~vue
-    // Vue.filter("getRGBColor", function (value) {
-    //     return xu.getRGBColor(value)[0];
-    // });
-    // Vue.filter("getGColor", function (value) {
-    //     return this.getRGBColor(value)[1];
-    // });
-    // Vue.filter("getBColor", function (value) {
-    //     return this.getRGBColor(value)[2];
-    // });
 
     var xu = new Vue({
         el: '#drawing-board-page',
@@ -102,6 +91,9 @@ $(function () {
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
             pageColor: '000000',
             newColor: '000000',
+            RColor: '00',
+            GColor: '00',
+            BColor: '00',
             hexColorArr: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'],
             hexColorStr: '0123456789ABCDEF'
         },
@@ -111,7 +103,10 @@ $(function () {
                 var currentBkColor = this.getAttrValue($(e.target), 'backgroundColor');
                 this.trBk = true;
                 this.popupColorShow = true;
-                this.newColor = this.getHexColor(currentBkColor);
+                this.newColor = this.getHexColorFromRgb(currentBkColor);
+                this.RColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[0];
+                this.GColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[1];
+                this.BColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[2];
             },
             // 颜色选择器 ~确定
             colorConfirm: function () {
@@ -119,14 +114,34 @@ $(function () {
                 this.popupColorShow = false;
                 this.pageColor = this.newColor;
             },
+            // 颜色选择器 ~取消
             colorCancel: function () {
                 this.trBk = false;
                 this.popupColorShow = false;
             },
             // 颜色选择器 ~选择
-            selectColor:function (e) {
+            selectColor: function (e) {
                 var selectedColor = this.getAttrValue($(e.target), 'backgroundColor');
-                this.newColor = this.getHexColor(selectedColor);
+                this.newColor = this.getHexColorFromRgb(selectedColor);
+            },
+            // 颜色选择器 ~绑定
+            bindHex: function (e) {
+                this.newColor = $(e.target).val();
+                this.RColor = this.getRGBColor($(e.target).val())[0];
+                this.GColor = this.getRGBColor($(e.target).val())[1];
+                this.BColor = this.getRGBColor($(e.target).val())[2];
+            },
+            bindRColor: function (e) {
+                this.RColor = $(e.target).val();
+                this.newColor = '' + this.getHexColorFromRGB([this.RColor,this.GColor,this.BColor]);
+            },
+            bindGColor: function (e) {
+                this.GColor = $(e.target).val();
+                this.newColor = '' + this.getHexColorFromRGB([this.RColor,this.GColor,this.BColor]);
+            },
+            bindBColor: function (e) {
+                this.BColor = $(e.target).val();
+                this.newColor = '' + this.getHexColorFromRGB([this.RColor,this.GColor,this.BColor]);
             },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
@@ -146,7 +161,7 @@ $(function () {
                 }
                 return true;
             },
-            // 获取RGB颜色值
+            // 获取RGB颜色值 hexColorValue:'000000'
             getRGBColor: function (hexColorValue) {
                 //不非法直接返回黑色
                 if (!this.hexColorValueValid(hexColorValue)) return ['00', '00', '00'];
@@ -177,11 +192,18 @@ $(function () {
                 }
                 return [tempR, tempG, tempB];
             },
-            // 获取16进制颜色值
-            getHexColor: function (RGBColor) {
-                var tempR = this.RGBReg(RGBColor)[0],
-                    tempG = this.RGBReg(RGBColor)[1],
-                    tempB = this.RGBReg(RGBColor)[2];
+            // 获取16进制颜色值   RgbColor : rgb(n,n,n)
+            getHexColorFromRgb: function (RgbColor) {
+                var tempR = this.RGBReg(RgbColor)[0],
+                    tempG = this.RGBReg(RgbColor)[1],
+                    tempB = this.RGBReg(RgbColor)[2];
+                return '' + this.calHexValue(tempR) + this.calHexValue(tempG) + this.calHexValue(tempB);
+            },
+            // 获取16进制颜色值   RGBColor : [n,n,n]
+            getHexColorFromRGB : function (RGBColor) {
+                var tempR = RGBColor[0],
+                    tempG = RGBColor[1],
+                    tempB = RGBColor[2];
                 return '' + this.calHexValue(tempR) + this.calHexValue(tempG) + this.calHexValue(tempB);
             },
             // 计算RGB数值 #
@@ -230,17 +252,17 @@ $(function () {
                 return tempArr;
             }
         },
-        computed: {
-            getRColor: function () {
-                return this.getRGBColor(this.newColor)[0];
-            },
-            getGColor: function () {
-                return this.getRGBColor(this.newColor)[1];
-            },
-            getBColor: function () {
-                return this.getRGBColor(this.newColor)[2];
-            }
-        }
+        // computed: {
+        //     getRColor: function () {
+        //         return this.getRGBColor(this.newColor)[0];
+        //     },
+        //     getGColor: function () {
+        //         return this.getRGBColor(this.newColor)[1];
+        //     },
+        //     getBColor: function () {
+        //         return this.getRGBColor(this.newColor)[2];
+        //     }
+        // }
     });
 
     // 重复字符串 #

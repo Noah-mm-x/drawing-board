@@ -82,28 +82,28 @@
 						<ul>
 							<li class="clearfix">
 								<p>R:</p>
-								<input type="number" name="R-color" v-model="getRColor" readonly>
+								<input type="text" name="R-color" maxlength="3" v-model="RColor" v-on:input="bindRColor($event)">
 							</li>
 							<li class="clearfix">
 								<p>G:</p>
-								<input type="number" name="G-color" v-model="getGColor" readonly>
+								<input type="text" name="G-color" maxlength="3" v-model="GColor" v-on:input="bindGColor($event)">
 							</li>
 							<li class="clearfix">
 								<p>B:</p>
-								<input type="number" name="B-color" v-model="getBColor" readonly>
+								<input type="text" name="B-color" maxlength="3" v-model="BColor" v-on:input="bindBColor($event)">
 							</li>
 						</ul>
 					</div>
 					<div class="hex-color clearfix">
 						<p>16进制值：</p>
 						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="newColor"
-																	  maxlength="6"></div>
+																	  maxlength="6" v-on:input="bindHex($event)"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div v-cloak=""></div>
+	<div v-cloak="">{{RColor}}</div>
 </div>
 
 <script src="main.js"></script>
