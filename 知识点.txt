@@ -5,3 +5,4 @@
 3、style样式格式：:style="{backgroundColor: color}"  color为Data里面的数据color
 4、自定义过滤器必须放在实例化的前面
 5、v-model存放标签的原始数值，v-on绑定个方法用于控制用户输入时候的改变     用户输入的时候根据输入值重新确定v-model的数值
+6、vue主体思路其实就是，给个默认值放data里面，以后用方法动态改变（或页面input输入改变）

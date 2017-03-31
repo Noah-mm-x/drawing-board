@@ -10,7 +10,10 @@
 <body>
 <div id="drawing-board-page">
 	<header>
-		<div class="current-tool"><i class="iconfont icon-shouhui"></i></div>
+		<div class="current-tool">
+			<i :class="currentTool"></i>
+			<input type="hidden" name="currentTool" v-model="currentToolNum">
+		</div>
 		<ul class="tool-info clearfix">
 			<li class="lineWidth">
 				<p>线条宽度:</p>
@@ -19,7 +22,9 @@
 			<li class="color">
 				<p>颜色:</p>
 				<div class="color-box">
-					<div class="color-value" :style="{backgroundColor: '#'+pageColor}" @click="clickPopupColorShow($event)"
+					<div class="color-value"
+						 :style="{backgroundColor: '#'+pageColor}"
+						 @click="clickPopupColorShow()"
 						 v-cloak></div>
 				</div>
 			</li>
@@ -42,10 +47,13 @@
 	</header>
 	<main class="clearfix">
 		<ul class="tools clearfix">
-			<li data-tool="1" class="active"><i class="iconfont icon-shouhui"></i></li>
-			<li data-tool="2"><i class="iconfont icon-maobi"></i></li>
-			<li data-tool="3"><i class="iconfont icon-yuanxing"></i></li>
-			<li data-tool="4"><i class="iconfont icon-fangkuai"></i></li>
+			<li v-for="(tool,index) in tools"
+				:data-tool="tool.dataTool"
+				:class="{'active':index==selectedToolIndex}">
+				<i :class="tool.toolClass"
+				   @click.self="selectTool(tool,index)">
+				</i>
+			</li>
 		</ul>
 		<input id="select-tool" type="hidden" value="1">
 		<canvas id="drawing-board" width="862" height="400"></canvas>
@@ -58,7 +66,9 @@
 		<div class="content">
 			<div class="left">
 				<ul class="alternative-color">
-					<li v-for="color in colors" :style="{backgroundColor: color}" @click="selectColor($event)"></li>
+					<li v-for="color in colors"
+						:style="{backgroundColor: color}"
+						@click="selectColor($event)"></li>
 				</ul>
 			</div>
 			<div class="divider"></div>
@@ -82,15 +92,18 @@
 						<ul>
 							<li class="clearfix">
 								<p>R:</p>
-								<input type="text" name="R-color" maxlength="3" v-model="RColor" v-on:input="bindRColor($event)">
+								<input type="text" name="R-color" maxlength="3" v-model="RColor"
+									   v-on:input="bindRColor($event)">
 							</li>
 							<li class="clearfix">
 								<p>G:</p>
-								<input type="text" name="G-color" maxlength="3" v-model="GColor" v-on:input="bindGColor($event)">
+								<input type="text" name="G-color" maxlength="3" v-model="GColor"
+									   v-on:input="bindGColor($event)">
 							</li>
 							<li class="clearfix">
 								<p>B:</p>
-								<input type="text" name="B-color" maxlength="3" v-model="BColor" v-on:input="bindBColor($event)">
+								<input type="text" name="B-color" maxlength="3" v-model="BColor"
+									   v-on:input="bindBColor($event)">
 							</li>
 						</ul>
 					</div>

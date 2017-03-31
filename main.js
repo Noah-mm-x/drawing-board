@@ -55,17 +55,6 @@ $(function () {
 
     });
 
-    $('.tools > li').on('click', function () {
-        var _self = $(this);
-        _self.siblings().removeClass('active');
-        if (_self.hasClass('active')) {
-            _self.removeClass('active');
-            selectTool.val('');
-        } else {
-            _self.addClass('active');
-            selectTool.val(_self.data('tool'));
-        }
-    });
 
     // =========== 页面基础设置 ===========
 
@@ -86,6 +75,15 @@ $(function () {
         data: {
             trBk: false,
             popupColorShow: false,
+            currentTool: 'iconfont icon-shouhui',
+            currentToolNum: '1',
+            tools: [
+                {dataTool: '1', toolClass: 'iconfont icon-shouhui'},
+                {dataTool: '2', toolClass: 'iconfont icon-maobi'},
+                {dataTool: '3', toolClass: 'iconfont icon-yuanxing'},
+                {dataTool: '4', toolClass: 'iconfont icon-fangkuai'}
+            ],
+            selectedToolIndex: '0',
             colors: ['#FFDAB9', '#E6E6FA', '#8470FF', '#00CED1', '#7FFFD4', '#00FF7F', '#FFD700', '#CD5C5C', '#BBFFFF',
                 '#FFA500', '#FF0000', '#8A2BE2', '#EED5B7', '#F0FFDF', '#0000FF', '#00BFFF', '#AB82FF', '#E066FF',
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
@@ -98,9 +96,16 @@ $(function () {
             hexColorStr: '0123456789ABCDEF'
         },
         methods: {
+            // 工具 ~选择
+            selectTool: function (tool,index) {
+                this.currentToolNum = tool.dataTool;
+                this.currentTool = tool.toolClass;
+                tool.selected = true;
+                this.selectedToolIndex = index;
+            },
             // 颜色选择器 ~出现
-            clickPopupColorShow: function (e) {
-                var currentBkColor = this.getAttrValue($(e.target), 'backgroundColor');
+            clickPopupColorShow: function () {
+                var currentBkColor = this.pageColor;
                 this.trBk = true;
                 this.popupColorShow = true;
                 this.newColor = this.getHexColorFromRgb(currentBkColor);
@@ -136,15 +141,15 @@ $(function () {
             },
             bindRColor: function (e) {
                 this.RColor = $(e.target).val();
-                this.newColor = '' + this.getHexColorFromRGB([this.RColor,this.GColor,this.BColor]);
+                this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
             },
             bindGColor: function (e) {
                 this.GColor = $(e.target).val();
-                this.newColor = '' + this.getHexColorFromRGB([this.RColor,this.GColor,this.BColor]);
+                this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
             },
             bindBColor: function (e) {
                 this.BColor = $(e.target).val();
-                this.newColor = '' + this.getHexColorFromRGB([this.RColor,this.GColor,this.BColor]);
+                this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
             },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
@@ -203,7 +208,7 @@ $(function () {
                 return '' + this.calHexValue(tempR) + this.calHexValue(tempG) + this.calHexValue(tempB);
             },
             // 获取16进制颜色值   RGBColor : [n,n,n]
-            getHexColorFromRGB : function (RGBColor) {
+            getHexColorFromRGB: function (RGBColor) {
                 var tempR = RGBColor[0],
                     tempG = RGBColor[1],
                     tempB = RGBColor[2];
