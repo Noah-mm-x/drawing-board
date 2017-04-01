@@ -59,13 +59,13 @@
 				:data-tool="tool.dataTool"
 				:class="{'active':index==selectedToolIndex}">
 				<i :class="tool.toolClass"
-				   @click.self="selectTool(tool,index)"
+				   @click="selectTool(tool,index)"
 				>
 				</i>
 			</li>
 		</ul>
 		<input id="select-tool" type="hidden" value="1">
-		<canvas id="drawing-board" width="862" height="400"></canvas>
+		<canvas id="drawing-board" width="862" height="400" @mousedown="painting($event)"></canvas>
 	</main>
 	<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
 	<div class="tr-bk" v-if="trBk" v-cloak></div>

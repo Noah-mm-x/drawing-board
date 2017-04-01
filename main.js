@@ -3,52 +3,6 @@
  * # 为工具性方法
  */
 $(function () {
-
-
-
-    var canvas = $('#drawing-board'),
-        ctx = canvas[0].getContext('2d'),
-        selectTool = $('#select-tool'),
-        moving = false;
-    canvas.on('mousedown', function (e) {
-        if (selectTool.val() == '' || selectTool.val() == undefined || selectTool.val() == null) return false;
-        moving = true;
-        switch (selectTool.val()) {
-            case '1':
-                ctx.beginPath();
-                ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                $(document).on('mousemove', function (e) {
-                    e.preventDefault();
-                    if (!moving) return false;
-                    ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                    ctx.stroke();
-                });
-                $(document).on('mouseup', function (e) {
-                    moving = false;
-                    ctx.closePath();
-                });
-                break;
-            case '2':
-                ctx.beginPath();
-                ctx.lineCap = "round";
-                ctx.lineWidth = 5;
-                ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                $(document).on('mousemove', function (e) {
-                    e.preventDefault();
-                    if (!moving) return false;
-                    ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                    ctx.stroke();
-                });
-                $(document).on('mouseup', function (e) {
-                    moving = false;
-                    ctx.closePath();
-                });
-                break;
-        }
-
-
-    });
-
     /**
      *  工具 currentToolNum
      *      1：普通笔
@@ -178,11 +132,55 @@ $(function () {
                 this.currentAlpha = _selfVal <= 0 ? 0 : _selfVal >= 100 ? 100 : _selfVal;
                 this.sliderAlpha = this.currentAlpha - 4;
             },
-            // 画板 ~初始化工具
-            initTool:function () {
-                
+            // 画板 ~初始化
+            initTool: function (ctx) {
+                ctx.fillStyle = '#000000';
+                ctx.globalAlpha = 1;
             },
-
+            // 画板 ~设置
+            setTool: function (ctx) {
+                ctx.lineWidth = this.lineWidth;
+                ctx.fillStyle = '#' + this.pageColor;
+                ctx.globalAlpha = this.currentAlpha / 100;
+            },
+            //画板 ~绘制
+            painting: function (e) {
+                var canvas = $(e.target),
+                    ctx = canvas[0].getContext('2d'),
+                    moving = true;
+                switch (this.currentToolNum) {
+                    case '1':
+                        ctx.beginPath();
+                        ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                        $(document).on('mousemove', function (e) {
+                            e.preventDefault();
+                            if (!moving) return false;
+                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            ctx.stroke();
+                        });
+                        $(document).on('mouseup', function (e) {
+                            moving = false;
+                            ctx.closePath();
+                        });
+                        break;
+                    case '2':
+                        ctx.beginPath();
+                        ctx.lineCap = "round";
+                        ctx.lineWidth = 5;
+                        ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                        $(document).on('mousemove', function (e) {
+                            e.preventDefault();
+                            if (!moving) return false;
+                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            ctx.stroke();
+                        });
+                        $(document).on('mouseup', function (e) {
+                            moving = false;
+                            ctx.closePath();
+                        });
+                        break;
+                }
+            },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
             getAttrValue: function (target, attr, unit) {
