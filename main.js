@@ -204,7 +204,27 @@ $(function () {
                         break;
                 }
             },
-     
+            //画板 ~下载
+            downloadImage: function () {
+                var canvas = $(document).find('canvas'),
+                    type = 'png',
+                    imageData = canvas[0].toDataURL(type).replace(this.fixType(type), 'image/octet-stream'),
+                    filename=''+new Date().getDate()+'.'+type;
+                this.saveFile(imageData,filename);
+            },
+            fixType: function (type) {
+                type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
+                var r = type.match(/png|jpeg|bmp|gif/)[0];
+                return 'image/' + r;
+            },
+            saveFile: function (data, filename) {
+                var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                save_link.href = data;
+                save_link.download = filename;
+                var event = document.createEvent('MouseEvents');
+                event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                save_link.dispatchEvent(event);
+            },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
             getAttrValue: function (target, attr, unit) {
