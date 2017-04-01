@@ -9,6 +9,8 @@ $(function () {
      *      2：毛笔
      *      3：圆形
      *      4：方形
+     *      5: 文字
+     *      6：橡皮擦
      *  线条宽度 lineWidth
      *  笔触颜色 pageLineColor
      *  填充颜色 pageFillColor
@@ -31,7 +33,9 @@ $(function () {
                 {dataTool: '1', toolClass: 'iconfont icon-shouhui'},
                 {dataTool: '2', toolClass: 'iconfont icon-maobi'},
                 {dataTool: '3', toolClass: 'iconfont icon-yuanxing'},
-                {dataTool: '4', toolClass: 'iconfont icon-fangkuai'}
+                {dataTool: '4', toolClass: 'iconfont icon-fangkuai'},
+                {dataTool: '5', toolClass: 'iconfont icon-t'},
+                {dataTool: '6', toolClass: 'iconfont icon-xiangpicas'},
             ],
             selectedToolIndex: '0',
             lineWidth: '1',
