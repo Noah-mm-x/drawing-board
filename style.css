@@ -197,7 +197,7 @@ header {
 }
 
 .tool-info > li.alpha .select-alpha-slider{
-    display: none;
+    /*display: none;*/
     position: absolute;
     top: 46px;
     left: 8px;
@@ -217,7 +217,7 @@ header {
 .tool-info > li.alpha .select-alpha-slider .slider-axis-triangle{
     position: absolute;
     top: 0;
-    left: 94px;
+    /*left: 94px;*/
     width: 0;
     height: 0;
     border-bottom: 12px solid #f0f0f0;

@@ -4,13 +4,7 @@
  */
 $(function () {
 
-    /*
-     * 工具
-     *     1：普通笔
-     *     2：毛笔
-     *     3：圆形
-     *     4：方形
-     * */
+
 
     var canvas = $('#drawing-board'),
         ctx = canvas[0].getContext('2d'),
@@ -55,20 +49,16 @@ $(function () {
 
     });
 
-
-    // =========== 页面基础设置 ===========
-
-    // // 颜色选择器 ~消失
-    // btns.on('click', '.confirm , .cancel', function (e) {
-    //     if ($(e.target).hasClass('confirm')) pageCurrentColorBox.css('backgroundColor', getAttrValue(popupNewColorBox, 'backgroundColor'));
-    //     trBk.hide();
-    //     popupColor.hide();
-    // });
-    // // 颜色选择器 ~选择
-    // popupColorsBox.find('li').on('click', function () {
-    //     var _self = $(this),
-    //         tempColor = getAttrValue(_self, 'backgroundColor');
-    // });
+    /**
+     *  工具 currentToolNum
+     *      1：普通笔
+     *      2：毛笔
+     *      3：圆形
+     *      4：方形
+     *  线条宽度 lineWidth
+     *  颜色值 pageColor
+     *  透明度 currentAlpha
+     */
 
     var xu = new Vue({
         el: '#drawing-board-page',
@@ -84,7 +74,7 @@ $(function () {
                 {dataTool: '4', toolClass: 'iconfont icon-fangkuai'}
             ],
             selectedToolIndex: '0',
-            lineWidth:'1',
+            lineWidth: '1',
             colors: ['#FFDAB9', '#E6E6FA', '#8470FF', '#00CED1', '#7FFFD4', '#00FF7F', '#FFD700', '#CD5C5C', '#BBFFFF',
                 '#FFA500', '#FF0000', '#8A2BE2', '#EED5B7', '#F0FFDF', '#0000FF', '#00BFFF', '#AB82FF', '#E066FF',
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
@@ -94,11 +84,14 @@ $(function () {
             GColor: '00',
             BColor: '00',
             hexColorArr: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'],
-            hexColorStr: '0123456789ABCDEF'
+            hexColorStr: '0123456789ABCDEF',
+            selectAlphaSliderShow: false,
+            currentAlpha: 100,
+            sliderAlpha: 94,   //透明度选择器的小三角范围为 -6~94  对应的0~100透明度
         },
         methods: {
             // 工具 ~选择
-            selectTool: function (tool,index) {
+            selectTool: function (tool, index) {
                 this.currentToolNum = tool.dataTool;
                 this.currentTool = tool.toolClass;
                 tool.selected = true;
@@ -152,9 +145,44 @@ $(function () {
                 this.BColor = $(e.target).val();
                 this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
             },
-            bindLineWidth:function (e) {
+            bindLineWidth: function (e) {
                 this.lineWidth = $(e.target).val();
             },
+            // 透明度选择器 ~出现
+            clickSelectAlphaSliderShow: function () {
+                this.selectAlphaSliderShow = !this.selectAlphaSliderShow;
+            },
+            // 透明选择器 ~滑动
+            sliderMove: function (e) {
+                var _this = this,
+                    _self = $(e.target),
+                    mouseX = _self.position().left,
+                    mouseY = _self.position().top,
+                    offsetX = mouseX - e.pageX,
+                    offsetY = mouseY - e.pageY,
+                    moving = true;
+                document.onmousemove = function (e) {
+                    if (!moving) return false;
+                    mouseX = e.pageX + offsetX;
+                    mouseY = e.pageY + offsetY;
+                    _this.sliderAlpha = mouseX <= -6 ? -6 : mouseX >= 94 ? 94 : mouseX;
+                    _this.currentAlpha = _this.sliderAlpha + 4;
+                };
+                document.onmouseup = function () {
+                    moving = false;
+                };
+            },
+            // 透明选择器 ~输入
+            bindAlpha: function (e) {
+                var _selfVal = $(e.target).val();
+                this.currentAlpha = _selfVal <= 0 ? 0 : _selfVal >= 100 ? 100 : _selfVal;
+                this.sliderAlpha = this.currentAlpha - 4;
+            },
+            // 画板 ~初始化工具
+            initTool:function () {
+                
+            },
+
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
             getAttrValue: function (target, attr, unit) {

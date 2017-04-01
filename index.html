@@ -31,15 +31,23 @@
 			<li class="alpha">
 				<p>透明度:</p>
 				<div class="select-alpha-box">
-					<input type="text" name="alpha">
-					<div class="select-alpha">
+					<input type="text" name="alpha" v-model="currentAlpha" v-on:input="bindAlpha($event)">
+					<div class="select-alpha"
+						 @click="clickSelectAlphaSliderShow()"
+					>
 						<div class="slash leftSlash"></div>
 						<div class="slash rightSlash"></div>
 					</div>
 				</div>
-				<div class="select-alpha-slider">
+				<div class="select-alpha-slider"
+					 v-if="selectAlphaSliderShow"
+					 v-cloak
+				>
 					<div class="slider-axis">
-						<div class="slider-axis-trangle"></div>
+						<div class="slider-axis-triangle"
+							 :style="{left:sliderAlpha+'px'}"
+							 @mousedown="sliderMove($event)"
+						></div>
 					</div>
 				</div>
 			</li>
@@ -51,7 +59,8 @@
 				:data-tool="tool.dataTool"
 				:class="{'active':index==selectedToolIndex}">
 				<i :class="tool.toolClass"
-				   @click.self="selectTool(tool,index)">
+				   @click.self="selectTool(tool,index)"
+				>
 				</i>
 			</li>
 		</ul>
@@ -68,7 +77,9 @@
 				<ul class="alternative-color">
 					<li v-for="color in colors"
 						:style="{backgroundColor: color}"
-						@click="selectColor($event)"></li>
+						@click="selectColor($event)"
+					>
+					</li>
 				</ul>
 			</div>
 			<div class="divider"></div>
