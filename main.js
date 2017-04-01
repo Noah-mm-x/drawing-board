@@ -35,7 +35,7 @@ $(function () {
                 {dataTool: '3', toolClass: 'iconfont icon-yuanxing'},
                 {dataTool: '4', toolClass: 'iconfont icon-fangkuai'},
                 {dataTool: '5', toolClass: 'iconfont icon-t'},
-                {dataTool: '6', toolClass: 'iconfont icon-xiangpicas'},
+                {dataTool: '6', toolClass: 'iconfont icon-xiangpicas'}
             ],
             selectedToolIndex: '0',
             lineWidth: '1',
@@ -170,6 +170,7 @@ $(function () {
             painting: function (e) {
                 var canvas = $(e.target),
                     ctx = canvas[0].getContext('2d'),
+                    mouseStyle,
                     moving = true;
                 switch (this.currentToolNum) {
                     case '1':
@@ -206,6 +207,38 @@ $(function () {
                             ctx.closePath();
                         });
                         break;
+                    case '6':
+                        ctx.beginPath();
+                        ctx.lineCap = "round";
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 10;
+                        ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                        mouseStyle = $('<div></div>');
+                        mouseStyle.css({
+                            position: 'fixed',
+                            width: '10px',
+                            height: '10px',
+                            backgroundColor: '#fff',
+                            border: '1px solid #000',
+                            borderRadius: '50%'
+                        });
+                        $('body').append(mouseStyle);
+                        $(document).on('mousemove', function (e) {
+                            e.preventDefault();
+                            if (!moving) return false;
+                            mouseStyle.css({
+                                left: e.pageX-5,
+                                top: e.pageY-5
+                            });
+                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            ctx.stroke();
+                        });
+                        $(document).on('mouseup', function (e) {
+                            moving = false;
+                            mouseStyle.remove();
+                            ctx.closePath();
+                        });
+                        break;
                 }
             },
             //画板 ~下载
@@ -213,8 +246,8 @@ $(function () {
                 var canvas = $(document).find('canvas'),
                     type = 'png',
                     imageData = canvas[0].toDataURL(type).replace(this.fixType(type), 'image/octet-stream'),
-                    filename=''+new Date().getDate()+'.'+type;
-                this.saveFile(imageData,filename);
+                    filename = '' + new Date().getDate() + '.' + type;
+                this.saveFile(imageData, filename);
             },
             fixType: function (type) {
                 type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
