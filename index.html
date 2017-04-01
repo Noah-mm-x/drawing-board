@@ -63,6 +63,7 @@
 				</div>
 			</li>
 		</ul>
+		<div class="downloadImage" @click="downloadImage()">点击下载</div>
 	</header>
 	<main class="clearfix">
 		<ul class="tools clearfix">
@@ -81,8 +82,12 @@
 	<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
 	<div class="tr-bk" v-if="trBk" v-cloak></div>
 
-	<div class="popup-color" v-if="popupColorShow" v-cloak>
-		<div class="title">颜色选择器</div>
+	<div class="popup-color"
+		 :style="{left:popupColorPosition.x+'px',top:popupColorPosition.y+'px'}"
+		 v-if="popupColorShow"
+		 v-cloak
+	>
+		<div class="title" @mousedown="dragPopupColor($event)">颜色选择器</div>
 		<div class="content">
 			<div class="left">
 				<ul class="alternative-color">

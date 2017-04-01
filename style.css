@@ -224,6 +224,13 @@ header {
     border-left:6px solid transparent;
     border-right:6px solid transparent;
 }
+.downloadImage{
+    float: right;
+    margin-right: 10px;
+    line-height: 45px;
+    font-size: 16px;
+    color: #e2f0f0;
+}
 main {
     width: 940px;
     margin: 0 auto;
@@ -282,8 +289,8 @@ main {
 .popup-color {
     /*display: none;*/
     position: fixed;
-    top: 100px;
-    left: 100px;
+    /*top: 100px;*/
+    /*left: 100px;*/
     width: 512px;
     height: 354px;
     background-color: transparent;

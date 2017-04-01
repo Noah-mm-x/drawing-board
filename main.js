@@ -21,6 +21,10 @@ $(function () {
             trBk: false,
             popupColorShow: false,
             popupColorType: '1', //1 为线条颜色  2 为填充色
+            popupColorPosition: {
+                x: '100',
+                y: '100'
+            },
             currentTool: 'iconfont icon-shouhui',
             currentToolNum: '1',
             tools: [
@@ -65,6 +69,26 @@ $(function () {
                 this.RColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[0];
                 this.GColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[1];
                 this.BColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[2];
+            },
+            // 颜色选择器 ~拖拽
+            dragPopupColor: function (e) {
+                var _this = this,
+                    _self = $(e.target),
+                    mouseX = _self.offset().left,
+                    mouseY = _self.offset().top,
+                    offsetX = mouseX - e.pageX,
+                    offsetY = mouseY - e.pageY,
+                    moving = true;
+                document.onmousemove = function (e) {
+                    if (!moving) return false;
+                    mouseX = e.pageX + offsetX;
+                    mouseY = e.pageY + offsetY;
+                    _this.popupColorPosition.x = mouseX;
+                    _this.popupColorPosition.y = mouseY;
+                };
+                document.onmouseup = function () {
+                    moving = false;
+                };
             },
             // 颜色选择器 ~确定
             colorConfirm: function () {
@@ -138,17 +162,6 @@ $(function () {
                 this.currentAlpha = _selfVal <= 0 ? 0 : _selfVal >= 100 ? 100 : _selfVal;
                 this.sliderAlpha = this.currentAlpha - 4;
             },
-            // 画板 ~初始化
-            initTool: function (ctx) {
-                ctx.fillStyle = '#000000';
-                ctx.globalAlpha = 1;
-            },
-            // 画板 ~设置
-            setTool: function (ctx) {
-                ctx.lineWidth = this.lineWidth;
-                ctx.fillStyle = '#' + this.pageColor;
-                ctx.globalAlpha = this.currentAlpha / 100;
-            },
             //画板 ~绘制
             painting: function (e) {
                 var canvas = $(e.target),
@@ -157,6 +170,9 @@ $(function () {
                 switch (this.currentToolNum) {
                     case '1':
                         ctx.beginPath();
+                        ctx.lineCap = "butt";
+                        ctx.strokeStyle = '#' + this.pageLineColor;
+                        ctx.lineWidth = this.lineWidth;
                         ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
                         $(document).on('mousemove', function (e) {
                             e.preventDefault();
@@ -172,7 +188,8 @@ $(function () {
                     case '2':
                         ctx.beginPath();
                         ctx.lineCap = "round";
-                        ctx.lineWidth = 5;
+                        ctx.strokeStyle = '#' + this.pageLineColor;
+                        ctx.lineWidth = this.lineWidth < 5 ? 5 : this.lineWidth; //设置毛笔最小线粗
                         ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
                         $(document).on('mousemove', function (e) {
                             e.preventDefault();
@@ -187,6 +204,7 @@ $(function () {
                         break;
                 }
             },
+     
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
             getAttrValue: function (target, attr, unit) {
