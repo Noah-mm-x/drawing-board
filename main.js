@@ -10,7 +10,8 @@ $(function () {
      *      3：圆形
      *      4：方形
      *  线条宽度 lineWidth
-     *  颜色值 pageColor
+     *  笔触颜色 pageLineColor
+     *  填充颜色 pageFillColor
      *  透明度 currentAlpha
      */
 
@@ -19,6 +20,7 @@ $(function () {
         data: {
             trBk: false,
             popupColorShow: false,
+            popupColorType: '1', //1 为线条颜色  2 为填充色
             currentTool: 'iconfont icon-shouhui',
             currentToolNum: '1',
             tools: [
@@ -33,6 +35,8 @@ $(function () {
                 '#FFA500', '#FF0000', '#8A2BE2', '#EED5B7', '#F0FFDF', '#0000FF', '#00BFFF', '#AB82FF', '#E066FF',
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
             pageColor: '000000',
+            pageLineColor: '000000',
+            pageFillColor: '000000',
             newColor: '000000',
             RColor: '00',
             GColor: '00',
@@ -52,11 +56,12 @@ $(function () {
                 this.selectedToolIndex = index;
             },
             // 颜色选择器 ~出现
-            clickPopupColorShow: function () {
-                var currentBkColor = this.pageColor;
+            clickPopupColorShow: function (e) {
+                var currentBkColor = $(e.target).data('type') == '1' ? this.pageLineColor : this.pageFillColor;
+                this.popupColorType = $(e.target).data('type');
                 this.trBk = true;
                 this.popupColorShow = true;
-                this.newColor = this.getHexColorFromRgb(currentBkColor);
+                this.pageColor = this.newColor = this.getHexColorFromRgb(currentBkColor);
                 this.RColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[0];
                 this.GColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[1];
                 this.BColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[2];
@@ -65,7 +70,8 @@ $(function () {
             colorConfirm: function () {
                 this.trBk = false;
                 this.popupColorShow = false;
-                this.pageColor = this.newColor;
+                this.popupColorType == '1' ? this.pageLineColor = this.newColor
+                    : this.pageFillColor = this.newColor;
             },
             // 颜色选择器 ~取消
             colorCancel: function () {

@@ -20,11 +20,22 @@
 				<input type="number" name="lineWidth" v-model="lineWidth" v-on:input="bindLineWidth($event)">
 			</li>
 			<li class="color">
-				<p>颜色:</p>
+				<p>笔触颜色:</p>
 				<div class="color-box">
 					<div class="color-value"
-						 :style="{backgroundColor: '#'+pageColor}"
-						 @click="clickPopupColorShow()"
+						 data-type="1"
+						 :style="{backgroundColor: '#'+pageLineColor}"
+						 @click="clickPopupColorShow($event)"
+						 v-cloak></div>
+				</div>
+			</li>
+			<li class="color">
+				<p>填充颜色:</p>
+				<div class="color-box">
+					<div class="color-value"
+						 data-type="2"
+						 :style="{backgroundColor: '#'+pageFillColor}"
+						 @click="clickPopupColorShow($event)"
 						 v-cloak></div>
 				</div>
 			</li>
@@ -127,6 +138,7 @@
 			</div>
 		</div>
 	</div>
+	<div>{{popupColorType}}</div>
 </div>
 
 <script src="main.js"></script>
