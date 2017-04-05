@@ -97,7 +97,21 @@
 		   @click="bindInputText($event)"
 		   v-cloak
 	>
-
+	<!-- 临时矩形 -->
+	<div class="tempRect"
+		 :style="{
+		 	 width:rectTempAttr.width+'px',
+		 	 height:rectTempAttr.height+'px',
+		 	 left:rectTempAttr.left+'px',
+		 	 top:rectTempAttr.top+'px',
+		 	 borderWidth:rectTempAttr.borderWidth+'px',
+		 	 borderStyle:rectTempAttr.borderStyle,
+		 	 borderColor:'#'+rectTempAttr.borderColor,
+		 	 backgroundColor:'#'+rectTempAttr.backgroundColor,
+		 }"
+		 v-if="rectTempPositionShow"
+		 v-cloak
+	></div>
 	<div class="popup-color"
 		 :style="{left:popupColorPosition.x+'px',top:popupColorPosition.y+'px'}"
 		 v-if="popupColorShow"

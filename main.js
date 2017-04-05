@@ -59,7 +59,18 @@ $(function () {
                 x: '200',
                 y: '200'
             },
-            inputTextValue: ''
+            inputTextValue: '',
+            rectTempPositionShow: false,
+            rectTempAttr: {
+                width: '0',
+                height: '0',
+                left: '200',
+                top: '200',
+                borderWidth: '1',
+                borderStyle: 'solid',
+                borderColor: '000000',
+                backgroundColor: 'ffffff'
+            }
         },
         methods: {
             // 工具 ~选择
@@ -75,10 +86,10 @@ $(function () {
                 this.popupColorType = $(e.target).data('type');
                 this.trBk = true;
                 this.popupColorShow = true;
-                this.pageColor = this.newColor = this.getHexColorFromRgb(currentBkColor);
-                this.RColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[0];
-                this.GColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[1];
-                this.BColor = this.getRGBColor(this.getHexColorFromRgb(currentBkColor))[2];
+                this.pageColor = currentBkColor;
+                this.RColor = this.getRGBColor(currentBkColor)[0];
+                this.GColor = this.getRGBColor(currentBkColor)[1];
+                this.BColor = this.getRGBColor(currentBkColor)[2];
             },
             // 颜色选择器 ~拖拽
             dragPopupColor: function (e) {
@@ -129,15 +140,15 @@ $(function () {
             },
             bindRColor: function (e) {
                 this.RColor = $(e.target).val();
-                this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
+                this.newColor = '' + this.getHexColorFromRgb([this.RColor, this.GColor, this.BColor]);
             },
             bindGColor: function (e) {
                 this.GColor = $(e.target).val();
-                this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
+                this.newColor = '' + this.getHexColorFromRgb([this.RColor, this.GColor, this.BColor]);
             },
             bindBColor: function (e) {
                 this.BColor = $(e.target).val();
-                this.newColor = '' + this.getHexColorFromRGB([this.RColor, this.GColor, this.BColor]);
+                this.newColor = '' + this.getHexColorFromRgb([this.RColor, this.GColor, this.BColor]);
             },
             bindLineWidth: function (e) {
                 this.lineWidth = $(e.target).val();
@@ -229,7 +240,43 @@ $(function () {
                             ctx.closePath();
                         });
                         break;
-                    //   文字
+                    //   矩形
+                    case '4':
+                        ctx.lineWidth = this.lineWidth;
+                        ctx.strokeStyle = '#' + this.pageLineColor;
+                        ctx.fillStyle = '#' + this.pageFillColor;
+                        $(document).on('mousedown', function (e) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            _self.rectTempPositionShow = true;
+                            _self.rectTempAttr.left = e.pageX;
+                            _self.rectTempAttr.top = e.pageY;
+                            _self.rectTempAttr.borderWidth = _self.lineWidth;
+                            _self.rectTempAttr.borderColor = _self.pageLineColor;
+                            _self.rectTempAttr.backgroundColor = _self.pageFillColor;
+                            $(document).on('mousemove', function (e) {
+                                e.preventDefault();
+                                if (!moving) return false;
+                                _self.rectTempAttr.width = e.pageX - _self.rectTempAttr.left;
+                                _self.rectTempAttr.height = e.pageY - _self.rectTempAttr.top;
+                            });
+                            $(document).on('mouseup', function (e) {
+                                ctx.beginPath();
+                                // ctx.strokeRect(xTemp, yTemp, e.pageX - xTemp, e.pageY - yTemp);
+                                // ctx.fillRect(xTemp, yTemp, e.pageX - xTemp, e.pageY - yTemp);
+                                // ctx.restore();
+                                moving = false;
+                                ctx.closePath();
+                            });
+                            //越界直接消失
+                            if (e.pageX < canvasAttribute.left || e.pageX > canvasAttribute.left + canvasAttribute.width ||
+                                e.pageY < canvasAttribute.top || e.pageY > canvasAttribute.top + canvasAttribute.height) {
+                                _self.rectTempPositionShow = false;
+                            }
+                        });
+
+                        break;
+                    // 文字
                     case '5':
                         var fontSize;
                         $(document).on('click', function (e) {
@@ -249,7 +296,7 @@ $(function () {
                                     if (_self.inputTextValue != '' && _self.inputTextValue != undefined && _self.inputTextValue != null) {
                                         ctx.font = fontSize + "px Microsoft Yahei";
                                         ctx.fillStyle = '#' + _self.pageLineColor;
-                                        ctx.textBaseline="top";
+                                        ctx.textBaseline = "top";
                                         ctx.fillText(_self.inputTextValue,
                                             _self.inputTextPosition.x - canvasAttribute.left,
                                             _self.inputTextPosition.y - canvasAttribute.top);
@@ -387,20 +434,21 @@ $(function () {
                 }
                 return [tempR, tempG, tempB];
             },
-            // 获取16进制颜色值   RgbColor : rgb(n,n,n)
+            // 获取16进制颜色值
             getHexColorFromRgb: function (RgbColor) {
-                var tempR = this.RGBReg(RgbColor)[0],
-                    tempG = this.RGBReg(RgbColor)[1],
+                var tempR,tempG,tempB;
+                if (RgbColor.indexOf('rgb') != -1) {
+                    tempR = this.RGBReg(RgbColor)[0];
+                    tempG = this.RGBReg(RgbColor)[1];
                     tempB = this.RGBReg(RgbColor)[2];
+                } else {
+                    tempR = RgbColor[0];
+                    tempG = RgbColor[1];
+                    tempB = RgbColor[2];
+                }
                 return '' + this.calHexValue(tempR) + this.calHexValue(tempG) + this.calHexValue(tempB);
             },
-            // 获取16进制颜色值   RGBColor : [n,n,n]
-            getHexColorFromRGB: function (RGBColor) {
-                var tempR = RGBColor[0],
-                    tempG = RGBColor[1],
-                    tempB = RGBColor[2];
-                return '' + this.calHexValue(tempR) + this.calHexValue(tempG) + this.calHexValue(tempB);
-            },
+
             // 计算RGB数值 #
             calRGBValue: function (hexVal) {
                 var result = this.getHexIndex(hexVal.charAt(0)) * 16 + this.getHexIndex(hexVal.charAt(1));

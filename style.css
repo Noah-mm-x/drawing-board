@@ -315,7 +315,9 @@ input[name='inputText']{
     min-width: 130px;
     padding: 0;
 }
-
+.tempRect{
+    position: fixed;
+}
 /*弹窗*/
 .popup-color {
     /*display: none;*/
