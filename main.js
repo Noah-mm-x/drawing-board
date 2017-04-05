@@ -154,7 +154,7 @@ $(function () {
                     mouseX = e.pageX + offsetX;
                     mouseY = e.pageY + offsetY;
                     _this.sliderAlpha = mouseX <= -6 ? -6 : mouseX >= 94 ? 94 : mouseX;
-                    _this.currentAlpha = _this.sliderAlpha + 4;
+                    _this.currentAlpha = _this.sliderAlpha + 6;
                 };
                 document.onmouseup = function () {
                     moving = false;
@@ -208,6 +208,10 @@ $(function () {
                             moving = false;
                             ctx.closePath();
                         });
+                        break;
+                    //   文字
+                    case '5':
+
                         break;
                     //   橡皮擦
                     case '6':
