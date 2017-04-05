@@ -309,6 +309,13 @@ main {
     color: rgb(213, 213, 213);
 }
 
+input[name='inputText']{
+    position: fixed;
+    outline: none;
+    min-width: 130px;
+    padding: 0;
+}
+
 /*弹窗*/
 .popup-color {
     /*display: none;*/

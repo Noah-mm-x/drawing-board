@@ -82,6 +82,21 @@
 	</main>
 	<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
 	<div class="tr-bk" v-if="trBk" v-cloak></div>
+	<!--T 输入框-->
+	<input type="text"
+		   name="inputText"
+		   v-model="inputTextValue"
+		   :style="{
+		   		left:inputTextPosition.x+'px',
+		   		top:inputTextPosition.y+'px',
+		   		height:lineWidth < 12 ? 12+'px':lineWidth+'px',
+		   		fontSize:lineWidth < 12 ? 12+'px':lineWidth+'px',
+		   		color:'#'+pageLineColor
+		   }"
+		   v-if="inputTextShow"
+		   @click="bindInputText($event)"
+		   v-cloak
+	>
 
 	<div class="popup-color"
 		 :style="{left:popupColorPosition.x+'px',top:popupColorPosition.y+'px'}"
@@ -137,14 +152,20 @@
 					</div>
 					<div class="hex-color clearfix">
 						<p>16进制值：</p>
-						<div class="hex-color-setting"><p>#</p><input type="text" name="hex-color" v-model="newColor"
-																	  maxlength="6" v-on:input="bindHex($event)"></div>
+						<div class="hex-color-setting">
+							<p>#</p>
+							<input type="text"
+								   name="hex-color"
+								   v-model="newColor"
+								   maxlength="6"
+								   v-on:input="bindHex($event)"
+							></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div>{{popupColorType}}</div>
+	<div>{{pageLineColor}}</div>
 </div>
 
 <script src="main.js"></script>

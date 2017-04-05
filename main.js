@@ -44,7 +44,7 @@ $(function () {
                 '#8B1C62', '#FF82AB', '#EE1289', '#EE0000', '#FF6347', '#FF7F00', '#00FF00', '#00FF7F', '#00FFFF'],
             pageColor: '000000',
             pageLineColor: '000000',
-            pageFillColor: '000000',
+            pageFillColor: 'ffffff',
             newColor: '000000',
             RColor: '00',
             GColor: '00',
@@ -54,6 +54,12 @@ $(function () {
             selectAlphaSliderShow: false,
             currentAlpha: 100,
             sliderAlpha: 94,   //透明度选择器的小三角范围为 -6~94  对应的0~100透明度
+            inputTextShow: false, //文字输入时临时框
+            inputTextPosition: {
+                x: '200',
+                y: '200'
+            },
+            inputTextValue: ''
         },
         methods: {
             // 工具 ~选择
@@ -136,6 +142,9 @@ $(function () {
             bindLineWidth: function (e) {
                 this.lineWidth = $(e.target).val();
             },
+            bindInputText: function (e) {
+                this.inputTextValue = $(e.target).val();
+            },
             // 透明度选择器 ~出现
             clickSelectAlphaSliderShow: function () {
                 this.selectAlphaSliderShow = !this.selectAlphaSliderShow;
@@ -168,9 +177,20 @@ $(function () {
             },
             //画板 ~绘制
             painting: function (e) {
-                var canvas = $(e.target),
+                var _self = this,
+                    canvas = $(e.target),
                     ctx = canvas[0].getContext('2d'),
                     mouseStyle,
+                    canvasAttribute = {
+                        width: parseInt(this.getAttrValue(canvas, 'width', 'px')),
+                        height: parseInt(this.getAttrValue(canvas, 'height', 'px')),
+                        left: parseInt(canvas.position().left),
+                        top: parseInt(canvas.position().top)
+                    },
+                    position = {
+                        x: _self.inputTextPosition.x,
+                        y: _self.inputTextPosition.y
+                    },
                     moving = true;
                 switch (this.currentToolNum) {
                     // 普通笔
@@ -211,7 +231,49 @@ $(function () {
                         break;
                     //   文字
                     case '5':
+                        var fontSize;
+                        $(document).on('click', function (e) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            fontSize = _self.lineWidth < 12 ? 12 : _self.lineWidth;
+                            if (!_self.inputTextShow) {
+                                _self.inputTextShow = true;
+                                _self.inputTextPosition.x = e.pageX;
+                                _self.inputTextPosition.y = e.pageY;
+                            } else {
+                                // 如果点击的是input
+                                // !canvas.is(e.target) 点击的元素不是他自己
+                                // canvas.has(e.target).length === 0 他自己没有他自己
+                                if (!(!canvas.is(e.target) && canvas.has(e.target).length === 0)) {
+                                    _self.inputTextShow = false;
+                                    if (_self.inputTextValue != '' && _self.inputTextValue != undefined && _self.inputTextValue != null) {
+                                        ctx.font = fontSize + "px Microsoft Yahei";
+                                        ctx.fillStyle = '#' + _self.pageLineColor;
+                                        ctx.textBaseline="top";
+                                        ctx.fillText(_self.inputTextValue,
+                                            _self.inputTextPosition.x - canvasAttribute.left,
+                                            _self.inputTextPosition.y - canvasAttribute.top);
+                                        ctx.fillStyle = '#' + _self.pageLineColor;
+                                        _self.inputTextValue = "";
+                                    }
+                                }
+                            }
 
+                            // 确定临时input的位置
+                            // 点击canvas外面直接消失
+                            if (e.pageX < canvasAttribute.left || e.pageX > canvasAttribute.left + canvasAttribute.width ||
+                                e.pageY < canvasAttribute.top || e.pageY > canvasAttribute.top + canvasAttribute.height) {
+                                _self.inputTextShow = false;
+                                if (_self.inputTextValue != '' && _self.inputTextValue != undefined && _self.inputTextValue != null) {
+                                    ctx.font = fontSize + "px Microsoft Yahei";
+                                    ctx.fillStyle = '#' + _self.pageLineColor;
+                                    ctx.fillText(_self.inputTextValue,
+                                        _self.inputTextPosition.x - canvasAttribute.left,
+                                        _self.inputTextPosition.y - canvasAttribute.top - fontSize);
+                                    _self.inputTextValue = "";
+                                }
+                            }
+                        });
                         break;
                     //   橡皮擦
                     case '6':
