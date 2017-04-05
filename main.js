@@ -211,16 +211,17 @@ $(function () {
                         break;
                     //   橡皮擦
                     case '6':
+                        var lineWidth = this.lineWidth < 10 ? 10 : this.lineWidth;
                         ctx.beginPath();
                         ctx.lineCap = "round";
                         ctx.strokeStyle = '#ffffff';
-                        ctx.lineWidth = 10;
+                        ctx.lineWidth = lineWidth;
                         ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
                         mouseStyle = $('<div></div>');
                         mouseStyle.css({
                             position: 'fixed',
-                            width: '10px',
-                            height: '10px',
+                            width: lineWidth + 'px',
+                            height: lineWidth + 'px',
                             backgroundColor: '#fff',
                             border: '1px solid #000',
                             borderRadius: '50%'
@@ -230,8 +231,8 @@ $(function () {
                             e.preventDefault();
                             if (!moving) return false;
                             mouseStyle.css({
-                                left: e.pageX-5,
-                                top: e.pageY-5
+                                left: e.pageX - lineWidth / 2 + 'px',
+                                top: e.pageY - lineWidth / 2 + 'px'
                             });
                             ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
                             ctx.stroke();
@@ -265,10 +266,11 @@ $(function () {
                 event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
                 save_link.dispatchEvent(event);
             },
-            clearScreen:function () {
+            // 画板 ~清屏
+            clearScreen: function () {
                 var canvas = $(document).find('canvas'),
                     ctx = canvas[0].getContext('2d');
-                ctx.clearRect(0,0,canvas.width(),canvas.height());
+                ctx.clearRect(0, 0, canvas.width(), canvas.height());
             },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
