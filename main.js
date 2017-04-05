@@ -173,6 +173,7 @@ $(function () {
                     mouseStyle,
                     moving = true;
                 switch (this.currentToolNum) {
+                    // 普通笔
                     case '1':
                         ctx.beginPath();
                         ctx.lineCap = "butt";
@@ -190,6 +191,7 @@ $(function () {
                             ctx.closePath();
                         });
                         break;
+                    //  毛笔
                     case '2':
                         ctx.beginPath();
                         ctx.lineCap = "round";
@@ -207,6 +209,7 @@ $(function () {
                             ctx.closePath();
                         });
                         break;
+                    //   橡皮擦
                     case '6':
                         ctx.beginPath();
                         ctx.lineCap = "round";
@@ -261,6 +264,11 @@ $(function () {
                 var event = document.createEvent('MouseEvents');
                 event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
                 save_link.dispatchEvent(event);
+            },
+            clearScreen:function () {
+                var canvas = $(document).find('canvas'),
+                    ctx = canvas[0].getContext('2d');
+                ctx.clearRect(0,0,canvas.width(),canvas.height());
             },
             //=========== 方法区 ===========
             // 获取属性的具体数值 #
