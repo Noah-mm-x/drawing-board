@@ -112,6 +112,21 @@
 		 v-if="rectTempPositionShow"
 		 v-cloak
 	></div>
+	<!--临时圆形-->
+	<div class="tempRound"
+		 :style="{
+			 width:roundTempAttr.r+'px',
+		 	 height:roundTempAttr.r+'px',
+		 	 left:roundTempAttr.left+'px',
+		 	 top:roundTempAttr.top+'px',
+		 	 borderWidth:roundTempAttr.borderWidth+'px',
+		 	 borderStyle:roundTempAttr.borderStyle,
+		 	 borderColor:'#'+roundTempAttr.borderColor,
+		 	 backgroundColor:'#'+roundTempAttr.backgroundColor,
+		 }"
+		 v-if="roundTempPositionShow"
+		 v-cloak
+	></div>
 	<div class="popup-color"
 		 :style="{left:popupColorPosition.x+'px',top:popupColorPosition.y+'px'}"
 		 v-if="popupColorShow"

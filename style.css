@@ -318,6 +318,10 @@ input[name='inputText']{
 .tempRect{
     position: fixed;
 }
+.tempRound{
+    position: fixed;
+    border-radius: 50%;
+}
 /*弹窗*/
 .popup-color {
     /*display: none;*/

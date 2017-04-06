@@ -70,6 +70,16 @@ $(function () {
                 borderStyle: 'solid',
                 borderColor: '000000',
                 backgroundColor: 'ffffff'
+            },
+            roundTempPositionShow: false,
+            roundTempAttr: {
+                r: '0',
+                left: '0',
+                top: '0',
+                borderWidth: '1',
+                borderStyle: 'solid',
+                borderColor: '000000',
+                backgroundColor: 'ffffff'
             }
         },
         methods: {
@@ -197,7 +207,7 @@ $(function () {
                         left: parseInt(canvas.position().left),
                         top: parseInt(canvas.position().top)
                     },
-                    xTemp, yTemp, wTemp = 0, hTemp = 0,//用于临时矩形
+                    xTemp, yTemp, wTemp = 0, hTemp = 0, rTemp = 0,//用于临时矩形和圆形
                     fontSize, //用于输入文字
                     lineWidth,//用于橡皮擦
                     mouseStyle = $('<div></div>'), //用于临时橡皮擦
@@ -223,8 +233,28 @@ $(function () {
                             ctx.lineWidth = _self.lineWidth < 5 ? 5 : _self.lineWidth; //设置毛笔最小线粗
                             ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
                             break;
+                        case '3':
+                            moving = true;
+
+                            ctx.beginPath();
+                            ctx.lineWidth = _self.lineWidth;
+                            ctx.strokeStyle = '#' + _self.pageLineColor;
+                            ctx.fillStyle = '#' + _self.pageFillColor;
+                            _self.roundTempAttr.r = '0';
+                            _self.roundTempAttr.left = e.pageX;
+                            _self.roundTempAttr.top = e.pageY;
+                            _self.roundTempAttr.borderWidth = _self.lineWidth;
+                            _self.roundTempAttr.borderColor = _self.pageLineColor;
+                            _self.roundTempAttr.backgroundColor = _self.pageFillColor;
+                            _self.roundTempPositionShow = true;
+
+                            xTemp = e.pageX - canvas.offset().left;
+                            yTemp = e.pageY - canvas.offset().top;
+
+                            break;
                         case '4':
                             moving = true;
+
                             ctx.lineWidth = _self.lineWidth;
                             ctx.strokeStyle = '#' + _self.pageLineColor;
                             ctx.fillStyle = '#' + _self.pageFillColor;
@@ -300,6 +330,13 @@ $(function () {
                             ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
                             ctx.stroke();
                             break;
+                        case '3':
+                            if (!moving) return false;
+                            //这里暂且用pageX作为半径，以后有需要再改
+                            _self.roundTempAttr.r = (e.pageX - _self.roundTempAttr.left) > 200 ? 200
+                                : (e.pageX - _self.roundTempAttr.left);
+                            rTemp = _self.roundTempAttr.r / 2;
+                            break;
                         case '4':
                             if (!moving) return false;
 
@@ -328,6 +365,19 @@ $(function () {
                         case '2':
                             moving = false;
                             ctx.closePath();
+                            break;
+                        case '3':
+                            moving = false;
+
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#' + _self.pageLineColor;
+                            ctx.fillStyle = '#' + _self.pageFillColor;
+                            ctx.arc(xTemp + rTemp, yTemp + rTemp, rTemp, 0, 2 * Math.PI);
+                            ctx.stroke();
+                            ctx.fill();
+                            ctx.closePath();
+                            _self.roundTempPositionShow = false;
+                            xTemp = yTemp = rTemp = 0;
                             break;
                         case '4':
                             moving = false;
@@ -489,6 +539,10 @@ $(function () {
                     tempArr.push(obj[item]);
                 }
                 return tempArr;
+            },
+            //计算绘制圆形时left,top #
+            calRoundPosition: function (r) {
+                return (2 - Math.sqrt(2)) / 2 * r;
             }
         }
     });
