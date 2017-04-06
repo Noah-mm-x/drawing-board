@@ -202,51 +202,64 @@ $(function () {
                         x: _self.inputTextPosition.x,
                         y: _self.inputTextPosition.y
                     },
-                    moving = true;
+                    moving = false;
                 switch (this.currentToolNum) {
                     // 普通笔
                     case '1':
-                        ctx.beginPath();
                         ctx.lineCap = "butt";
                         ctx.strokeStyle = '#' + this.pageLineColor;
                         ctx.lineWidth = this.lineWidth;
-                        ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                        $(document).on('mousemove', function (e) {
+                        $(document).on('mousedown', 'canvas', function (e) {
+                            console.log(1);
                             e.preventDefault();
-                            if (!moving) return false;
-                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                            ctx.stroke();
-                        });
-                        $(document).on('mouseup', function (e) {
-                            moving = false;
-                            ctx.closePath();
+                            e.stopImmediatePropagation();
+                            moving = true;
+                            ctx.beginPath();
+                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            $(document).on('mousemove', 'canvas', function (e) {
+                                e.preventDefault();
+                                if (!moving) return false;
+                                ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                                ctx.stroke();
+                            });
+                            $(document).on('mouseup', 'canvas', function (e) {
+                                moving = false;
+                                ctx.closePath();
+                            });
                         });
                         break;
                     //  毛笔
                     case '2':
-                        ctx.beginPath();
                         ctx.lineCap = "round";
                         ctx.strokeStyle = '#' + this.pageLineColor;
                         ctx.lineWidth = this.lineWidth < 5 ? 5 : this.lineWidth; //设置毛笔最小线粗
-                        ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                        $(document).on('mousemove', function (e) {
+                        $(document).on('mousedown', 'canvas', function (e) {
+                            moving = true;
                             e.preventDefault();
-                            if (!moving) return false;
-                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                            ctx.stroke();
+                            e.stopImmediatePropagation();
+                            ctx.beginPath();
+                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            $(document).on('mousemove', 'canvas', function (e) {
+                                e.preventDefault();
+                                if (!moving) return false;
+                                ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                                ctx.stroke();
+                            });
+                            $(document).on('mouseup', 'canvas', function (e) {
+                                moving = false;
+                                ctx.closePath();
+                            });
                         });
-                        $(document).on('mouseup', function (e) {
-                            moving = false;
-                            ctx.closePath();
-                        });
+
                         break;
                     //   矩形
                     case '4':
+                        moving = true;
                         var xTemp, yTemp, wTemp, hTemp;
                         ctx.lineWidth = this.lineWidth;
                         ctx.strokeStyle = '#' + this.pageLineColor;
                         ctx.fillStyle = '#' + this.pageFillColor;
-                        $(document).on('mousedown', function (e) {
+                        $(document).on('mousedown', 'canvas', function (e) {
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             //越界直接消失
@@ -264,7 +277,7 @@ $(function () {
 
                             xTemp = e.pageX - canvas.offset().left;
                             yTemp = e.pageY - canvas.offset().top;
-                            $(document).on('mousemove', function (e) {
+                            $(document).on('mousemove', 'canvas', function (e) {
                                 e.preventDefault();
                                 if (!moving) return false;
                                 _self.rectTempAttr.width = e.pageX - _self.rectTempAttr.left;
@@ -272,7 +285,7 @@ $(function () {
                                 wTemp = e.pageX - _self.rectTempAttr.left;
                                 hTemp = e.pageY - _self.rectTempAttr.top;
                             });
-                            $(document).on('mouseup', function (e) {
+                            $(document).on('mouseup', 'canvas', function (e) {
                                 ctx.beginPath();
                                 ctx.strokeStyle = '#' + _self.pageLineColor;
                                 ctx.fillStyle = '#' + _self.pageFillColor;
@@ -290,8 +303,9 @@ $(function () {
                         break;
                     // 文字
                     case '5':
+                        moving = true;
                         var fontSize;
-                        $(document).on('click', function (e) {
+                        $(document).on('click', 'canvas', function (e) {
                             e.preventDefault();
                             e.stopImmediatePropagation();
                             fontSize = _self.lineWidth < 12 ? 12 : _self.lineWidth;
@@ -336,37 +350,39 @@ $(function () {
                         break;
                     //   橡皮擦
                     case '6':
-                        _self.rectTempPositionShow = false;
+                        moving = true;
                         var lineWidth = this.lineWidth < 10 ? 10 : this.lineWidth;
-                        ctx.beginPath();
                         ctx.lineCap = "round";
                         ctx.strokeStyle = '#ffffff';
                         ctx.lineWidth = lineWidth;
-                        ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                        mouseStyle = $('<div></div>');
-                        mouseStyle.css({
-                            position: 'fixed',
-                            width: lineWidth + 'px',
-                            height: lineWidth + 'px',
-                            backgroundColor: '#fff',
-                            border: '1px solid #000',
-                            borderRadius: '50%'
-                        });
-                        $('body').append(mouseStyle);
-                        $(document).on('mousemove', function (e) {
-                            e.preventDefault();
-                            if (!moving) return false;
+                        $(document).on('mousedown', 'canvas', function (e) {
+                            ctx.beginPath();
+                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            mouseStyle = $('<div></div>');
                             mouseStyle.css({
-                                left: e.pageX - lineWidth / 2 + 'px',
-                                top: e.pageY - lineWidth / 2 + 'px'
+                                position: 'fixed',
+                                width: lineWidth + 'px',
+                                height: lineWidth + 'px',
+                                backgroundColor: '#fff',
+                                border: '1px solid #000',
+                                borderRadius: '50%'
                             });
-                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                            ctx.stroke();
-                        });
-                        $(document).on('mouseup', function (e) {
-                            moving = false;
-                            mouseStyle.remove();
-                            ctx.closePath();
+                            $('body').append(mouseStyle);
+                            $(document).on('mousemove', 'canvas', function (e) {
+                                e.preventDefault();
+                                if (!moving) return false;
+                                mouseStyle.css({
+                                    left: e.pageX - lineWidth / 2 + 'px',
+                                    top: e.pageY - lineWidth / 2 + 'px'
+                                });
+                                ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                                ctx.stroke();
+                            });
+                            $(document).on('mouseup', 'canvas', function (e) {
+                                moving = false;
+                                mouseStyle.remove();
+                                ctx.closePath();
+                            });
                         });
                         break;
                 }
