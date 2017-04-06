@@ -198,76 +198,38 @@ $(function () {
                         left: parseInt(canvas.position().left),
                         top: parseInt(canvas.position().top)
                     },
-                    position = {
-                        x: _self.inputTextPosition.x,
-                        y: _self.inputTextPosition.y
-                    },
+                    xTemp, yTemp, wTemp, hTemp,//用于临时矩形
+                    fontSize, //用于输入文字
+                    lineWidth,//用于橡皮擦
+                    mouseStyle = $('<div></div>'), //用于临时橡皮擦
                     moving = false;
-                switch (this.currentToolNum) {
-                    // 普通笔
-                    case '1':
-                        ctx.lineCap = "butt";
-                        ctx.strokeStyle = '#' + this.pageLineColor;
-                        ctx.lineWidth = this.lineWidth;
-                        $(document).on('mousedown', 'canvas', function (e) {
-                            console.log(1);
-                            e.preventDefault();
-                            e.stopImmediatePropagation();
+                $(document).on('mousedown', 'canvas', function (e) {
+                    e.stopImmediatePropagation();
+                    switch (_self.currentToolNum) {
+                        case '1':
                             moving = true;
-                            ctx.beginPath();
-                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                            $(document).on('mousemove', 'canvas', function (e) {
-                                e.preventDefault();
-                                if (!moving) return false;
-                                ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                                ctx.stroke();
-                            });
-                            $(document).on('mouseup', 'canvas', function (e) {
-                                moving = false;
-                                ctx.closePath();
-                            });
-                        });
-                        break;
-                    //  毛笔
-                    case '2':
-                        ctx.lineCap = "round";
-                        ctx.strokeStyle = '#' + this.pageLineColor;
-                        ctx.lineWidth = this.lineWidth < 5 ? 5 : this.lineWidth; //设置毛笔最小线粗
-                        $(document).on('mousedown', 'canvas', function (e) {
-                            moving = true;
-                            e.preventDefault();
-                            e.stopImmediatePropagation();
-                            ctx.beginPath();
-                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                            $(document).on('mousemove', 'canvas', function (e) {
-                                e.preventDefault();
-                                if (!moving) return false;
-                                ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                                ctx.stroke();
-                            });
-                            $(document).on('mouseup', 'canvas', function (e) {
-                                moving = false;
-                                ctx.closePath();
-                            });
-                        });
 
-                        break;
-                    //   矩形
-                    case '4':
-                        moving = true;
-                        var xTemp, yTemp, wTemp, hTemp;
-                        ctx.lineWidth = this.lineWidth;
-                        ctx.strokeStyle = '#' + this.pageLineColor;
-                        ctx.fillStyle = '#' + this.pageFillColor;
-                        $(document).on('mousedown', 'canvas', function (e) {
-                            e.preventDefault();
-                            e.stopImmediatePropagation();
-                            //越界直接消失
-                            if (e.pageX < canvasAttribute.left || e.pageX > canvasAttribute.left + canvasAttribute.width ||
-                                e.pageY < canvasAttribute.top || e.pageY > canvasAttribute.top + canvasAttribute.height) {
-                                _self.rectTempPositionShow = false;
-                                return false;
-                            }
+                            ctx.beginPath();
+                            ctx.lineCap = "butt";
+                            ctx.strokeStyle = '#' + _self.pageLineColor;
+                            ctx.lineWidth = _self.lineWidth;
+                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            break;
+                        case '2':
+                            moving = true;
+
+                            ctx.beginPath();
+                            ctx.lineCap = "round";
+                            ctx.strokeStyle = '#' + _self.pageLineColor;
+                            ctx.lineWidth = _self.lineWidth < 5 ? 5 : _self.lineWidth; //设置毛笔最小线粗
+                            ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            break;
+                        case '4':
+                            moving = true;
+
+                            ctx.lineWidth = _self.lineWidth;
+                            ctx.strokeStyle = '#' + _self.pageLineColor;
+                            ctx.fillStyle = '#' + _self.pageFillColor;
                             _self.rectTempAttr.left = e.pageX;
                             _self.rectTempAttr.top = e.pageY;
                             _self.rectTempAttr.borderWidth = _self.lineWidth;
@@ -277,37 +239,10 @@ $(function () {
 
                             xTemp = e.pageX - canvas.offset().left;
                             yTemp = e.pageY - canvas.offset().top;
-                            $(document).on('mousemove', 'canvas', function (e) {
-                                e.preventDefault();
-                                if (!moving) return false;
-                                _self.rectTempAttr.width = e.pageX - _self.rectTempAttr.left;
-                                _self.rectTempAttr.height = e.pageY - _self.rectTempAttr.top;
-                                wTemp = e.pageX - _self.rectTempAttr.left;
-                                hTemp = e.pageY - _self.rectTempAttr.top;
-                            });
-                            $(document).on('mouseup', 'canvas', function (e) {
-                                ctx.beginPath();
-                                ctx.strokeStyle = '#' + _self.pageLineColor;
-                                ctx.fillStyle = '#' + _self.pageFillColor;
-                                ctx.rect(xTemp, yTemp, wTemp, hTemp);
-                                ctx.stroke();
-                                ctx.fill();
-                                ctx.closePath();
+                            break;
+                        case '5':
+                            moving = true;
 
-                                _self.rectTempPositionShow = false;
-                                moving = false;
-                            });
-
-                        });
-
-                        break;
-                    // 文字
-                    case '5':
-                        moving = true;
-                        var fontSize;
-                        $(document).on('click', 'canvas', function (e) {
-                            e.preventDefault();
-                            e.stopImmediatePropagation();
                             fontSize = _self.lineWidth < 12 ? 12 : _self.lineWidth;
                             if (!_self.inputTextShow) {
                                 _self.inputTextShow = true;
@@ -319,7 +254,8 @@ $(function () {
                                 // canvas.has(e.target).length === 0 他自己没有他自己
                                 if (!(!canvas.is(e.target) && canvas.has(e.target).length === 0)) {
                                     _self.inputTextShow = false;
-                                    if (_self.inputTextValue != '' && _self.inputTextValue != undefined && _self.inputTextValue != null) {
+                                    if (_self.inputTextValue != '' && _self.inputTextValue != undefined
+                                        && _self.inputTextValue != null) {
                                         ctx.font = fontSize + "px Microsoft Yahei";
                                         ctx.fillStyle = '#' + _self.pageLineColor;
                                         ctx.textBaseline = "top";
@@ -331,34 +267,16 @@ $(function () {
                                     }
                                 }
                             }
+                            break;
+                        case '6':
+                            moving = true;
 
-                            // 确定临时input的位置
-                            // 点击canvas外面直接消失
-                            if (e.pageX < canvasAttribute.left || e.pageX > canvasAttribute.left + canvasAttribute.width ||
-                                e.pageY < canvasAttribute.top || e.pageY > canvasAttribute.top + canvasAttribute.height) {
-                                _self.inputTextShow = false;
-                                if (_self.inputTextValue != '' && _self.inputTextValue != undefined && _self.inputTextValue != null) {
-                                    ctx.font = fontSize + "px Microsoft Yahei";
-                                    ctx.fillStyle = '#' + _self.pageLineColor;
-                                    ctx.fillText(_self.inputTextValue,
-                                        _self.inputTextPosition.x - canvasAttribute.left,
-                                        _self.inputTextPosition.y - canvasAttribute.top - fontSize);
-                                    _self.inputTextValue = "";
-                                }
-                            }
-                        });
-                        break;
-                    //   橡皮擦
-                    case '6':
-                        moving = true;
-                        var lineWidth = this.lineWidth < 10 ? 10 : this.lineWidth;
-                        ctx.lineCap = "round";
-                        ctx.strokeStyle = '#ffffff';
-                        ctx.lineWidth = lineWidth;
-                        $(document).on('mousedown', 'canvas', function (e) {
                             ctx.beginPath();
+                            lineWidth = _self.lineWidth < 10 ? 10 : _self.lineWidth;
+                            ctx.lineCap = "round";
+                            ctx.strokeStyle = '#ffffff';
+                            ctx.lineWidth = lineWidth;
                             ctx.moveTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                            mouseStyle = $('<div></div>');
                             mouseStyle.css({
                                 position: 'fixed',
                                 width: lineWidth + 'px',
@@ -368,24 +286,71 @@ $(function () {
                                 borderRadius: '50%'
                             });
                             $('body').append(mouseStyle);
-                            $(document).on('mousemove', 'canvas', function (e) {
-                                e.preventDefault();
-                                if (!moving) return false;
-                                mouseStyle.css({
-                                    left: e.pageX - lineWidth / 2 + 'px',
-                                    top: e.pageY - lineWidth / 2 + 'px'
-                                });
-                                ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
-                                ctx.stroke();
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                $(document).on('mousemove', 'canvas', function (e) {
+                    e.stopImmediatePropagation();
+                    switch (_self.currentToolNum) {
+                        case '1':
+                        case '2':
+                            if (!moving) return false;
+                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            ctx.stroke();
+                            break;
+                        case '4':
+                            if (!moving) return false;
+                            _self.rectTempAttr.width = e.pageX - _self.rectTempAttr.left;
+                            _self.rectTempAttr.height = e.pageY - _self.rectTempAttr.top;
+                            wTemp = e.pageX - _self.rectTempAttr.left;
+                            hTemp = e.pageY - _self.rectTempAttr.top;
+                            break;
+                        case '6':
+                            if (!moving) return false;
+                            mouseStyle.css({
+                                left: e.pageX - lineWidth / 2 + 'px',
+                                top: e.pageY - lineWidth / 2 + 'px'
                             });
-                            $(document).on('mouseup', 'canvas', function (e) {
-                                moving = false;
-                                mouseStyle.remove();
-                                ctx.closePath();
-                            });
-                        });
-                        break;
-                }
+                            ctx.lineTo(e.pageX - canvas.offset().left, e.pageY - canvas.offset().top);
+                            ctx.stroke();
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                $(document).on('mouseup', function (e) {
+                    e.stopImmediatePropagation();
+                    switch (_self.currentToolNum) {
+                        case '1':
+                        case '2':
+                            moving = false;
+                            ctx.closePath();
+                            break;
+                        case '4':
+                            moving = false;
+
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#' + _self.pageLineColor;
+                            ctx.fillStyle = '#' + _self.pageFillColor;
+                            ctx.rect(xTemp, yTemp, wTemp, hTemp);
+                            ctx.stroke();
+                            ctx.fill();
+                            ctx.closePath();
+                            _self.rectTempPositionShow = false;
+                            break;
+                        case '5':
+                            break;
+                        case '6':
+                            moving = false;
+                            mouseStyle.remove();
+                            ctx.closePath();
+                            break;
+                        default:
+                            break;
+                    }
+                });
             },
             //画板 ~下载
             downloadImage: function () {
