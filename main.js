@@ -64,8 +64,8 @@ $(function () {
             rectTempAttr: {
                 width: '0',
                 height: '0',
-                left: '200',
-                top: '200',
+                left: '0',
+                top: '0',
                 borderWidth: '1',
                 borderStyle: 'solid',
                 borderColor: '000000',
@@ -191,14 +191,13 @@ $(function () {
                 var _self = this,
                     canvas = $(e.target),
                     ctx = canvas[0].getContext('2d'),
-                    mouseStyle,
                     canvasAttribute = {
                         width: parseInt(this.getAttrValue(canvas, 'width', 'px')),
                         height: parseInt(this.getAttrValue(canvas, 'height', 'px')),
                         left: parseInt(canvas.position().left),
                         top: parseInt(canvas.position().top)
                     },
-                    xTemp, yTemp, wTemp, hTemp,//用于临时矩形
+                    xTemp, yTemp, wTemp = 0, hTemp = 0,//用于临时矩形
                     fontSize, //用于输入文字
                     lineWidth,//用于橡皮擦
                     mouseStyle = $('<div></div>'), //用于临时橡皮擦
@@ -226,12 +225,13 @@ $(function () {
                             break;
                         case '4':
                             moving = true;
-
                             ctx.lineWidth = _self.lineWidth;
                             ctx.strokeStyle = '#' + _self.pageLineColor;
                             ctx.fillStyle = '#' + _self.pageFillColor;
                             _self.rectTempAttr.left = e.pageX;
                             _self.rectTempAttr.top = e.pageY;
+                            _self.rectTempAttr.width = '0';
+                            _self.rectTempAttr.height = '0';
                             _self.rectTempAttr.borderWidth = _self.lineWidth;
                             _self.rectTempAttr.borderColor = _self.pageLineColor;
                             _self.rectTempAttr.backgroundColor = _self.pageFillColor;
@@ -302,6 +302,7 @@ $(function () {
                             break;
                         case '4':
                             if (!moving) return false;
+
                             _self.rectTempAttr.width = e.pageX - _self.rectTempAttr.left;
                             _self.rectTempAttr.height = e.pageY - _self.rectTempAttr.top;
                             wTemp = e.pageX - _self.rectTempAttr.left;
@@ -339,6 +340,7 @@ $(function () {
                             ctx.fill();
                             ctx.closePath();
                             _self.rectTempPositionShow = false;
+                            xTemp = yTemp = wTemp = hTemp = 0;
                             break;
                         case '5':
                             break;
