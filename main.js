@@ -242,37 +242,49 @@ $(function () {
                         break;
                     //   矩形
                     case '4':
+                        var xTemp, yTemp, wTemp, hTemp;
                         ctx.lineWidth = this.lineWidth;
                         ctx.strokeStyle = '#' + this.pageLineColor;
                         ctx.fillStyle = '#' + this.pageFillColor;
                         $(document).on('mousedown', function (e) {
                             e.preventDefault();
                             e.stopImmediatePropagation();
-                            _self.rectTempPositionShow = true;
+                            //越界直接消失
+                            if (e.pageX < canvasAttribute.left || e.pageX > canvasAttribute.left + canvasAttribute.width ||
+                                e.pageY < canvasAttribute.top || e.pageY > canvasAttribute.top + canvasAttribute.height) {
+                                _self.rectTempPositionShow = false;
+                                return false;
+                            }
                             _self.rectTempAttr.left = e.pageX;
                             _self.rectTempAttr.top = e.pageY;
                             _self.rectTempAttr.borderWidth = _self.lineWidth;
                             _self.rectTempAttr.borderColor = _self.pageLineColor;
                             _self.rectTempAttr.backgroundColor = _self.pageFillColor;
+                            _self.rectTempPositionShow = true;
+
+                            xTemp = e.pageX - canvas.offset().left;
+                            yTemp = e.pageY - canvas.offset().top;
                             $(document).on('mousemove', function (e) {
                                 e.preventDefault();
                                 if (!moving) return false;
                                 _self.rectTempAttr.width = e.pageX - _self.rectTempAttr.left;
                                 _self.rectTempAttr.height = e.pageY - _self.rectTempAttr.top;
+                                wTemp = e.pageX - _self.rectTempAttr.left;
+                                hTemp = e.pageY - _self.rectTempAttr.top;
                             });
                             $(document).on('mouseup', function (e) {
                                 ctx.beginPath();
-                                // ctx.strokeRect(xTemp, yTemp, e.pageX - xTemp, e.pageY - yTemp);
-                                // ctx.fillRect(xTemp, yTemp, e.pageX - xTemp, e.pageY - yTemp);
-                                // ctx.restore();
-                                moving = false;
+                                ctx.strokeStyle = '#' + _self.pageLineColor;
+                                ctx.fillStyle = '#' + _self.pageFillColor;
+                                ctx.rect(xTemp, yTemp, wTemp, hTemp);
+                                ctx.stroke();
+                                ctx.fill();
                                 ctx.closePath();
-                            });
-                            //越界直接消失
-                            if (e.pageX < canvasAttribute.left || e.pageX > canvasAttribute.left + canvasAttribute.width ||
-                                e.pageY < canvasAttribute.top || e.pageY > canvasAttribute.top + canvasAttribute.height) {
+
                                 _self.rectTempPositionShow = false;
-                            }
+                                moving = false;
+                            });
+
                         });
 
                         break;
@@ -324,6 +336,7 @@ $(function () {
                         break;
                     //   橡皮擦
                     case '6':
+                        _self.rectTempPositionShow = false;
                         var lineWidth = this.lineWidth < 10 ? 10 : this.lineWidth;
                         ctx.beginPath();
                         ctx.lineCap = "round";
@@ -436,7 +449,7 @@ $(function () {
             },
             // 获取16进制颜色值
             getHexColorFromRgb: function (RgbColor) {
-                var tempR,tempG,tempB;
+                var tempR, tempG, tempB;
                 if (RgbColor.indexOf('rgb') != -1) {
                     tempR = this.RGBReg(RgbColor)[0];
                     tempG = this.RGBReg(RgbColor)[1];
@@ -452,7 +465,7 @@ $(function () {
             // 计算RGB数值 #
             calRGBValue: function (hexVal) {
                 var result = this.getHexIndex(hexVal.charAt(0)) * 16 + this.getHexIndex(hexVal.charAt(1));
-                return result > 10 ? result : '0' + result;
+                return result >= 10 ? result : '0' + result;
             },
             // 根据位置获得16进制数 #
             getHexValue: function (index) {
