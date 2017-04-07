@@ -555,6 +555,4 @@ $(function () {
         }
         return result;
     };
-
-
 });
