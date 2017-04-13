@@ -266,6 +266,7 @@ main {
     float: left;
     margin-left: 10px;
     background-color: #fff;
+    user-select: none;
 }
 
 .clearfix {
