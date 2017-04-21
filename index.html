@@ -81,7 +81,7 @@
 		<canvas id="drawing-board" width="862" height="400" @mousedown="painting($event)"></canvas>
 	</main>
 	<!--公用透明背景遮罩，作用：防止其他元素相应事件-->
-	<div class="tr-bk" v-if="trBk" v-cloak></div>
+	<div class="tr-bk" v-show="trBk" v-cloak></div>
 	<!--T 输入框-->
 	<input type="text"
 		   name="inputText"
@@ -93,7 +93,7 @@
 		   		fontSize:lineWidth < 12 ? 12+'px':lineWidth+'px',
 		   		color:'#'+pageLineColor
 		   }"
-		   v-if="inputTextShow"
+		   v-show="inputTextShow"
 		   @click="bindInputText($event)"
 		   v-cloak
 	>
@@ -109,7 +109,7 @@
 		 	 borderColor:'#'+rectTempAttr.borderColor,
 		 	 backgroundColor:'#'+rectTempAttr.backgroundColor,
 		 }"
-		 v-if="rectTempPositionShow"
+		 v-show="rectTempPositionShow"
 		 v-cloak
 	></div>
 	<!--临时圆形-->
@@ -124,12 +124,12 @@
 		 	 borderColor:'#'+roundTempAttr.borderColor,
 		 	 backgroundColor:'#'+roundTempAttr.backgroundColor,
 		 }"
-		 v-if="roundTempPositionShow"
+		 v-show="roundTempPositionShow"
 		 v-cloak
 	></div>
 	<div class="popup-color"
 		 :style="{left:popupColorPosition.x+'px',top:popupColorPosition.y+'px'}"
-		 v-if="popupColorShow"
+		 v-show="popupColorShow"
 		 v-cloak
 	>
 		<div class="title" @mousedown="dragPopupColor($event)">颜色选择器</div>
